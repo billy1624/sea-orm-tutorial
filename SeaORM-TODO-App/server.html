@@ -1,0 +1,576 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js navy">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Building Server Connections and Responses - SeaORM-TODO-App</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "navy";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('navy')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="tcp-server.html"><strong aria-hidden="true">2.</strong> Building The TCP Server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tables.html"><strong aria-hidden="true">2.1.</strong> Creating Tables</a></li><li class="chapter-item expanded "><a href="server.html" class="active"><strong aria-hidden="true">2.2.</strong> Building Server Connections and Responses</a></li></ol></li><li class="chapter-item expanded "><a href="client.html"><strong aria-hidden="true">3.</strong> Building The TODO TCP Client</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="utils.html"><strong aria-hidden="true">3.1.</strong> Formating Utilities</a></li><li class="chapter-item expanded "><a href="remote-db.html"><strong aria-hidden="true">3.2.</strong> Remote Database Operations</a></li><li class="chapter-item expanded "><a href="stdout.html"><strong aria-hidden="true">3.3.</strong> Reading User Input</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">SeaORM-TODO-App</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/SeaQL/sea-orm-tutorial" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/SeaQL/sea-orm-tutorial/edit/master/SeaORM-TODO-App/book/src/server.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="building-server-connections-and-responses"><a class="header" href="#building-server-connections-and-responses">Building Server Connections and Responses</a></h1>
+<p>Create a new director in the <code>src</code> folder called <code>server</code>.</p>
+<p>Inside the <code>server</code> directory create <code>mod.rs</code>, <code>tcp_api.rs</code> and <code>connection.rs</code> </p>
+<pre><code class="language-sh">SeaORM-TODO-App/src
+				|-- src/fruits_table
+                |-- src/insert_values.rs
+                |-- src/main.rs
+                |-- src/suppliers_table
+                |-- src/todos_table 
+                |-- src/server
++                	|-- mod.rs
++                	|-- tcp_api.rs
++                	|-- connection.rs
+</code></pre>
+<p>Import the new submodules to <code>src/server/mod.rs</code> file</p>
+<pre><pre class="playground"><code class="language-rust no_run no_playground">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>mod tcp_api;
+mod connection;
+
+pub use tcp_api::*;
+pub use connection::*;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Then register the module to the <code>src.main.rs</code> file</p>
+<pre><code>// -- code snippet --
+
+mod server;
+pub use server::*;
+
+#[async_std::main]
+async fn main() -&gt; anyhow::Result&lt;()&gt; {
+	// -- code snippet --
+	
+	Ok(())
+}
+</code></pre>
+<h4 id="the-tcp-api"><a class="header" href="#the-tcp-api">The TCP API</a></h4>
+<p>Create the commands that the tcp api will handle. In the <code>src/server/tcp_api.rs</code> add:</p>
+<pre><code class="language-rust no_run noplayground">use serde::{Serialize, Deserialize};
+
+// The commands to use to perform CRUD operations on PostgreSQL
+#[derive(Debug, Serialize, Deserialize)]
+pub enum Command {
+    Store { username: String, todo_list: String },
+    UpdateTodoList { username: String, todo_list: String },
+    Get(String),
+    CreateUser(String),
+    ListFruits,
+}
+</code></pre>
+<p><code>Command::Store { username: String, todo_list: String }</code> will handle an insert operation, inserting the <code>todo_list</code> in the row with the column labeled by <code>username</code>.</p>
+<p><code>Command::UpdateTodoList { username: String, todo_list: String }</code> will handle an update operation, inserting the <code>todo_list</code> in the row with the column labeled by <code>username</code>.</p>
+<p><code>Command::Get(String)</code> will fetch the <code>todo_list</code> from the column <code>username</code> with the username in the <code>String</code> field.</p>
+<p><code>Command::CreateUser(String)</code> will create a new row with the <code>String</code> field being inserted in the <code>username</code> column.</p>
+<p><code>Command::ListFruits</code> will fetch all the fruits in the <code>fruits</code> table.</p>
+<p>The <code>Command</code> enum will be deserialized by <code>bincode</code> crate. Add the <code>bincode</code> and <code>serde</code> crates to <code>Cargo.toml</code> file</p>
+<pre><code class="language-sh">$ cargo add bincode
+
+$ cargo add serde --features derive
+</code></pre>
+<p>Add error handling capabilities incase the wrong command is invoked</p>
+<p><code>File: src/server/tcp_api.rs</code></p>
+<pre><code class="language-rust no_rust noplayground">// -- code snippet --
+
+#[derive(Debug)]
+pub enum ServerErrors {
+    InvalidCommand,
+    ModelNotFound,
+}
+
+impl Error for ServerErrors {
+    fn source(&amp;self) -&gt; Option&lt;&amp;(dyn Error + 'static)&gt; {
+        match self {
+            ServerErrors::InvalidCommand =&gt; Some(&amp;crate::ServerErrors::InvalidCommand),
+            ServerErrors::ModelNotFound =&gt; Some(&amp;crate::ServerErrors::ModelNotFound),
+        }
+    }
+}
+
+impl fmt::Display for ServerErrors {
+    fn fmt(&amp;self, f: &amp;mut fmt::Formatter&lt;'_&gt;) -&gt; fmt::Result {
+        write!(
+            f,
+            &quot;{:?}&quot;,
+            match self {
+                ServerErrors::InvalidCommand =&gt; &quot;Invalid command provided&quot;,
+                ServerErrors::ModelNotFound =&gt; &quot;The result of the query is `None`&quot;,
+            }
+        )
+    }
+}
+</code></pre>
+<p>The <code>ServerErrors::InvalidCommand</code> is returned when the method called on a <code>Command</code> is invalid while the <code>ServerErrors::ModelNotFound</code> is returned when a <code>Model</code> is not found in the database.</p>
+<p>Then implement the methods for the <code>Command</code> enum that will handle database operations</p>
+<p><code>File: src/server/tcp_api.rs</code></p>
+<pre><code class="language-rust no_run noplayground">// -- code snippet --
++ use crate::{Fruits, Suppliers, Todos, TodosActiveModel, TodosColumn, TodosModel};
++ use sea_orm::{
++     ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, ModelTrait, QueryFilter, Set,
++ };
+  use serde::{Deserialize, Serialize};
++ use std::{error::Error, fmt};
+
+// The commands to use to perform CRUD operations on PostgreSQL
+#[derive(Debug, Serialize, Deserialize)]
+pub enum Command {
+    Store { username: String, todo_list: String },
+    UpdateTodoList { username: String, todo_list: String },
+    Get(String),
+    CreateUser(String),
+    ListFruits,
+}
+
+
+</code></pre>
+<p>Implement methods to handle the commands from the api</p>
+<p><code>File: src/server/tcp_api.rs</code></p>
+<pre><code class="language-rust no_run noplayground">// -- code snippet --
+// The commands to use to perform CRUD operations on PostgreSQL
+#[derive(Debug, Serialize, Deserialize)]
+pub enum Command {
+    Store { username: String, todo_list: String },
+    UpdateTodoList { username: String, todo_list: String },
+    Get(String),
+    CreateUser(String),
+    ListFruits,
+}
+
+impl Command {
+    pub async fn get_fruits(&amp;self, db: &amp;DatabaseConnection) -&gt; anyhow::Result&lt;Vec&lt;u8&gt;&gt; {
+        let fruit_models = Fruits::find().all(db).await?;
+        let fruits = fruit_models
+            .iter()
+            .map(|fruit_model| fruit_model.fruit_name.clone())
+            .collect::&lt;Vec&lt;String&gt;&gt;();
+
+        Ok(bincode::serialize(&amp;fruits)?)
+    }
+
+    pub async fn store(&amp;self, db: &amp;DatabaseConnection) -&gt; anyhow::Result&lt;Vec&lt;u8&gt;&gt; {
+        match self {
+            Self::Store {
+                username,
+                todo_list,
+            } =&gt; {
+                let todo_user = TodosActiveModel {
+                    username: Set(username.to_owned()),
+                    todo_list: Set(Some(todo_list.to_owned())),
+                    ..Default::default()
+                };
+                Todos::insert(todo_user).exec(db).await?;
+
+                Ok(bincode::serialize(&quot;INSERTED&quot;)?)
+            }
+            _ =&gt; Err(anyhow::Error::new(ServerErrors::InvalidCommand)),
+        }
+    }
+
+    pub async fn create_new_user(&amp;self, db: &amp;DatabaseConnection) -&gt; anyhow::Result&lt;Vec&lt;u8&gt;&gt; {
+        match self {
+            Self::CreateUser(username) =&gt; {
+                let todo_user = TodosActiveModel {
+                    username: Set(username.to_owned()),
+                    ..Default::default()
+                };
+                Todos::insert(todo_user).exec(db).await?;
+
+                Ok(bincode::serialize(&amp;format!(&quot;CREATED_USER `{}`&quot;, username))?)
+            }
+            _ =&gt; Err(anyhow::Error::new(ServerErrors::InvalidCommand)),
+        }
+    }
+
+    pub async fn get_user_todo(&amp;self, db: &amp;DatabaseConnection) -&gt; anyhow::Result&lt;Vec&lt;u8&gt;&gt; {
+        match self {
+            Self::Get(user) =&gt; {
+                let get_todo = Todos::find()
+                    .filter(TodosColumn::Username.contains(user))
+                    .one(db)
+                    .await?;
+
+                if let Some(found_todo) = get_todo {
+                    Ok(bincode::serialize(&amp;found_todo.todo_list)?)
+                } else {
+                    Ok(bincode::serialize(&amp;Some(&quot;USER_NOT_FOUND&quot;))?)
+                }
+            }
+            _ =&gt; Err(anyhow::Error::new(ServerErrors::InvalidCommand)),
+        }
+    }
+
+    pub async fn update_todo_list(&amp;self, db: &amp;DatabaseConnection) -&gt; anyhow::Result&lt;Vec&lt;u8&gt;&gt; {
+        match self {
+            Self::UpdateTodoList {
+                username,
+                todo_list,
+            } =&gt; {
+                let found_todo: Option&lt;TodosModel&gt; = Todos::find()
+                    .filter(TodosColumn::Username.contains(username))
+                    .one(db)
+                    .await?;
+
+                match found_todo {
+                    Some(todo_model) =&gt; {
+                        let mut todo_model: TodosActiveModel = todo_model.into();
+                        todo_model.todo_list = Set(Some(todo_list.to_owned()));
+                        todo_model.update(db).await?;
+                    }
+                    None =&gt; return Err(anyhow::Error::new(ServerErrors::ModelNotFound)),
+                };
+
+                Ok(bincode::serialize(&quot;UPDATED_TODO&quot;)?)
+            }
+            _ =&gt; Err(anyhow::Error::new(ServerErrors::InvalidCommand)),
+        }
+    }
+}
+
+</code></pre>
+<p>The <code>get_fruits()</code> method  handles the <code>Command::ListFruits</code>  command and it is responsible for fetching the list of fruits in the database.</p>
+<p>The <code>store()</code> method handles the <code>Command:: Store {..}</code> command and it inserts the field <code>todo_list</code> in the <code>username</code> column corresponding to the <code>username</code> field.</p>
+<p>The <code>create_new_user()</code> method handles <code>Command::CreateUser(..)</code> command, it creates a new user by inserting the <code>String</code> field data to the <code>username</code> column and an empty entry in the <code>todo_list</code> column.</p>
+<p>The <code>get_user_todo()</code> method handles <code>Command::Get(..)</code> command. It is used mostly to check if the user in the <code>String</code> field exists in the <code>username</code> column.</p>
+<p>The <code>update_todo_list()</code> method handles the <code>Command:: UpdateTodoList {..}</code> command and it updates the field <code>todo_list</code> in the <code>username</code> column corresponding to the <code>username</code> field.</p>
+<h4 id="the-tcp-api-handler"><a class="header" href="#the-tcp-api-handler">The TCP API handler</a></h4>
+<p>The <code>TcpStream</code> will need to be handled. The <code>src/server/connection.rs</code> file contains the code for this.</p>
+<p><code>File: src/server/connection.rs</code></p>
+<pre><code class="language-rust no_run.noplayground">// Import the necessary async versions of TcpStream and TcpListener
+use crate::Command;
+use async_std::{
+    net::{Shutdown, SocketAddr, TcpListener, TcpStream},
+    prelude::*,
+    sync::Arc,
+    task,
+};
+
+use sea_orm::DatabaseConnection;
+
+const BUFFER_DATA_CAPACITY: usize = 1024 * 1024; // The todo list should not exceed 1MiB
+const BUFFER_CAPACITY: usize = 64 * 1024; //64Kib
+
+// function is called to create a new server on port 8080 localhost
+pub async fn start_server(db: Arc&lt;DatabaseConnection&gt;) -&gt; anyhow::Result&lt;()&gt; {
+    let listener = TcpListener::bind(&quot;127.0.0.1:8080&quot;).await?;
+    println!(&quot;Listening on 127.0.0.1:8080&quot;);
+
+    while let Some(stream) = listener.incoming().next().await {
+        let stream = stream?;
+        let db = db.clone();
+
+        task::spawn(async move {
+            match process_stream(db, stream).await {
+                Ok(addr) =&gt; {
+                    println!(&quot;x → {addr:?} - DISCONNECTED&quot;)
+                }
+                Err(error) =&gt; {
+                    eprintln!(&quot;{:?}&quot;, error);
+                }
+            }
+        })
+        .await;
+    }
+
+    Ok(())
+}
+
+async fn process_stream(
+    db: Arc&lt;DatabaseConnection&gt;,
+    mut stream: TcpStream,
+) -&gt; anyhow::Result&lt;SocketAddr&gt; {
+    let peer = stream.peer_addr()?;
+    println!(&quot;← → {peer:?} - CONNECTED&quot;);
+    let mut buffer = [0u8; BUFFER_CAPACITY];
+    let mut command_buffer: Vec&lt;u8&gt; = Vec::new();
+    let bytes_read = stream.read(&amp;mut buffer).await?;
+    while bytes_read != 0 {
+        if command_buffer.len() &gt; BUFFER_DATA_CAPACITY {
+            handle_response(&amp;mut stream, b&quot;BUFFER_CAPACITY_EXCEEDED_1MiB&quot;.to_vec()).await?;
+        }
+
+        // Check if the current stream is less than the buffer capacity, if so all data has been received
+        if buffer[..bytes_read].len() &lt; BUFFER_CAPACITY {
+            // Ensure that the data is appended before being deserialized by bincode
+            command_buffer.append(&amp;mut buffer[..bytes_read].to_owned());
+            let dbop_result = process_database_op(&amp;db, &amp;command_buffer).await?;
+            handle_response(&amp;mut stream, dbop_result).await?;
+            break;
+        }
+        // Append data to buffer
+        command_buffer.append(&amp;mut buffer[..bytes_read].to_owned());
+    }
+
+    let peer = stream.peer_addr()?;
+    //Shutdown the TCP address
+    stream.shutdown(Shutdown::Both)?;
+    // Terminate the stream if the client terminates the connection by sending 0 bytes
+    return Ok(peer);
+}
+
+async fn handle_response(stream: &amp;mut TcpStream, reponse_data: Vec&lt;u8&gt;) -&gt; anyhow::Result&lt;()&gt; {
+    stream.write_all(&amp;reponse_data).await?;
+
+    stream.flush().await?;
+
+    Ok(())
+}
+
+async fn process_database_op(
+    db: &amp;DatabaseConnection,
+    command_buffer: &amp;[u8],
+) -&gt; anyhow::Result&lt;Vec&lt;u8&gt;&gt; {
+    let command: Command = bincode::deserialize(command_buffer)?;
+
+    let db_op = match command {
+        Command::Get(..) =&gt; command.get_user_todo(db).await,
+        Command::CreateUser(..) =&gt; command.create_new_user(db).await,
+        Command::ListFruits =&gt; command.get_fruits(db).await,
+        Command::ListSuppliers =&gt; command.get_suppliers(db).await,
+        Command::Store { .. } =&gt; command.store(db).await,
+        Command::UpdateTodoList { .. } =&gt; command.update_todo_list(db).await,
+        Command::DeleteUser(..) =&gt; command.delete_user(db).await,
+    };
+
+    match db_op {
+        Ok(value) =&gt; Ok(value),
+        Err(error) =&gt; Ok(bincode::serialize(&amp;error.to_string())?),
+    }
+}
+
+</code></pre>
+<p>Here, the <code>BUFFER_DATA_CAPACITY</code> caps the TODO list data at <code>1MiB</code> and limits the buffer capacity for the TCP stream using <code>BUFFER_CAPACITY</code> capped at <code>64KiB</code>.</p>
+<p>The <code>start_server()</code> function  creates a <code>TcpListener</code> at port <code>8080</code> localhost IP <code>127.0.0.1</code>. It  accepts a database connection inside an <code>Arc&lt;DatabaseConnection&gt;</code> for thread safety when we spawn a task to handle the stream. Each <code>TcpStream</code> is handled asynchronously using a <code>async::task::spawn()</code> method. </p>
+<p><code>stream.read(&amp;mut buffer).await?;</code> reads the stream. The while loop loops until the stream returns a <code>0_usize</code> indicating the connection has been closed by the peer and if data has been received, it checks if the data has exceeded the </p>
+<p><code>BUFFER_DATA_CAPACITY</code> of <code>1MiB</code>, if not it decodes the buffer using <code>bincode</code> and passes the data to the <code>process_database_op()</code> function which matches the deserialized <code>Command</code> and calls the appropriate method which in turn performs the database operation, encodes the result of the database operation and writes it back to the peer using the <code>handle_response()</code> function.</p>
+<h4 id="start-the-server"><a class="header" href="#start-the-server">Start the server</a></h4>
+<p>Lastly, inside the <code>src/main.rs</code> file, start the server</p>
+<p><code>File: src/main.rs</code></p>
+<pre><code class="language-rust no_run noplayground">use async_std::sync::Arc;
+use sea_orm::{
+    sea_query::{Alias, ColumnDef, ForeignKey, ForeignKeyAction, Table},
+    ConnectionTrait, Database, DbBackend,
+};
+
+// -- code snippet --
+
+#[async_std::main]
+async fn main() -&gt; anyhow::Result&lt;()&gt; {
+
+	// -- code snippet --
+	
+	
+    insert_fruits(&amp;db).await?;
+    insert_suppliers(&amp;db).await?;
+
++	start_server(db).await?;
+
+    Ok(())
+}
+
+</code></pre>
+<p>Run the program using <code>cargo run</code>. It print the following to the terminal</p>
+<pre><code class="language-sh">$ Running `/media/su43/IGIED-01/Rust-Projects/SeaQL/SeaORM-TODO-App/target/debug/todo-server`
+`CREATE TABLE fruits` &quot;Operation Successful&quot;
+`CREATE TABLE suppliers` &quot;Operation Successful&quot;
+`CREATE TABLE todos` &quot;Operation Successful&quot;
+INSERTED FRUITS: InsertResult { last_insert_id: 1 }
+INSERTED SUPPLIERS: InsertResult { last_insert_id: 1 }
+Listening on 127.0.0.1:8080
+</code></pre>
+<p>The server is now listening on <code>127.0.0.1:8080</code> for incoming <code>TcpStream</code>s.</p>
+<p>Next, we build the client.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="tables.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="client.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="tables.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="client.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </body>
+</html>

@@ -1,0 +1,350 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js navy">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Formating Utilities - SeaORM-TODO-App</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "navy";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('navy')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="tcp-server.html"><strong aria-hidden="true">2.</strong> Building The TCP Server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tables.html"><strong aria-hidden="true">2.1.</strong> Creating Tables</a></li><li class="chapter-item expanded "><a href="server.html"><strong aria-hidden="true">2.2.</strong> Building Server Connections and Responses</a></li></ol></li><li class="chapter-item expanded "><a href="client.html"><strong aria-hidden="true">3.</strong> Building The TODO TCP Client</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="utils.html" class="active"><strong aria-hidden="true">3.1.</strong> Formating Utilities</a></li><li class="chapter-item expanded "><a href="remote-db.html"><strong aria-hidden="true">3.2.</strong> Remote Database Operations</a></li><li class="chapter-item expanded "><a href="stdout.html"><strong aria-hidden="true">3.3.</strong> Reading User Input</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">SeaORM-TODO-App</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/SeaQL/sea-orm-tutorial" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/SeaQL/sea-orm-tutorial/edit/master/SeaORM-TODO-App/book/src/utils.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="formating-utilities"><a class="header" href="#formating-utilities">Formating Utilities</a></h1>
+<p>To create a better user experience, data will be formatted before it is displayed to the command line on <code>stdout</code>.</p>
+<h4 id="overview-of-code-formatting"><a class="header" href="#overview-of-code-formatting">Overview of Code Formatting</a></h4>
+<p>Create a <code>utils.rs</code> file which will hold the utilities and add the following code blocks:</p>
+<p><code>File: src/utils.rs</code></p>
+<pre><code class="language-rust no_run noplayground">use crate::MyTodosModel;
+use async_std::sync::Mutex;
+use std::collections::HashMap;
+
+pub(crate) const TITLE: &amp;str = &quot;FRUITS AVAILABLE&quot;;
+pub(crate) const NUMBER: &amp;str = &quot;No.&quot;;
+pub(crate) const ADD_COMMAND: &amp;str = &quot;ADD&quot;;
+pub(crate) const DONE_COMMAND: &amp;str = &quot;DONE&quot;;
+pub(crate) const UNDO_COMMAND: &amp;str = &quot;UNDO&quot;;
+pub(crate) const EDIT_COMMAND: &amp;str = &quot;EDIT&quot;;
+pub(crate) const EXIT_COMMAND: &amp;str = &quot;EXIT&quot;;
+
+
+const DONE: &amp;str = &quot;DONE TODOS&quot;;
+const NOT_DONE: &amp;str = &quot;NOT DONE&quot;;
+const QUANTITY: &amp;str = &quot;QUANTITY&quot;;
+
+pub(crate) type MemDB = Mutex&lt;HashMap&lt;String, MyTodosModel&gt;&gt;;
+
+pub fn clear_terminal() {
+    print!(&quot;\x1B[2J\x1B[1;1H&quot;);
+}
+
+pub fn synching() {
+    clear_terminal();
+    println!(&quot;SYNCING TO DATABASE...&quot;);
+}
+pub fn synching_to_server() {
+    println!(&quot;SYNCING TO SERVER...&quot;);
+}
+
+pub fn loading() {
+    clear_terminal();
+    println!(&quot;LOADING FROM DATABASE...&quot;);
+}
+
+pub fn convert_case(word: &amp;str) -&gt; String {
+    let word = word.to_lowercase();
+    let mut chars = word
+        .chars()
+        .map(|character| character.to_string())
+        .collect::&lt;Vec&lt;String&gt;&gt;();
+
+    chars[0] = chars[0].to_uppercase().to_string();
+
+    chars.into_iter().collect::&lt;String&gt;()
+}
+
+pub fn split_words(user_input: String) -&gt; Vec&lt;String&gt; {
+    user_input
+        .split(&quot; &quot;)
+        .map(|word| word.to_owned())
+        .collect::&lt;Vec&lt;String&gt;&gt;()
+}
+
+</code></pre>
+<p>The <code>TITLE</code> and <code>NUMBER</code> constants are used to format the headings for the <code>fruits</code> table which displays the list of fruits on the command-line interface. The constants <code>DONE</code>, <code>NOT_DONE</code> and <code>QUANTITY</code> are used as the headings of the TODO list.</p>
+<h4 id="interaction-commands"><a class="header" href="#interaction-commands">Interaction Commands</a></h4>
+<p>To interact with the client, a user will input a command, similar to pressing a button in a GUI or any other GUI event that performs an operation based on user input. The current list of commands are:</p>
+<p>The <code>ADD_COMMAND</code> constant holds the <code>ADD</code> command. This command allows a user to <code>queue</code> a task in the TODO list. The format is <code>ADD  QUANTITY_IN_KG FRUIT_NAME</code>.</p>
+<p>The <code>DONE_COMMAND</code> constant holds the <code>DONE</code> command. This command allows a user to mark a task as  <code>completed</code>  in the TODO list. The format is <code>DONE  FRUIT_NAME</code>.</p>
+<p>The <code>UNDO_COMMAND</code> constant holds the <code>UNDO</code> command. This command allows a user to move a completed task back into the <code>queue</code> in the TODO list. The format is <code>UNDO FRUIT_NAME</code>.</p>
+<p>The <code>EDIT_COMMAND</code> constant holds the <code>EDIT</code> command. This command allows a user to <code>modify</code> a task in the TODO list by changing it's <code>quantity</code>. The format is <code>EDIT  QUANTITY_IN_KG FRUIT_NAME</code>.</p>
+<p>The <code>EXIT_COMMAND</code> constant holds the <code>EXIT</code> command. This command allows a user to <code>exit</code>  the client gracefully and sync the local database cache with the remote PostgreSQL server. The format is <code>EXIT </code>.</p>
+<h4 id="word-formating"><a class="header" href="#word-formating">Word formating</a></h4>
+<p>A number of functions are presented in the code block above:</p>
+<p><code>clear_terminal()</code>  is used to clear the terminal using the command line specific flags <code>\x1B[2J\x1B[1;1H</code></p>
+<p><code>synching()</code> is used to show that the TODO list is being synced to the local SQLite database cache.</p>
+<p><code>synching_to_server()</code>  is used to show that the TODO list is being synced to the remote PostgreSQL database using the TCP API built in the previous chapter.</p>
+<p><code>loading()</code> is used to show that information about the user is being fetched from the remote PostgreSQL database.</p>
+<p><code>convert_case()</code> is used to format the <code>fruit</code> name to <code>Title Case</code>, for example, a user can enter a fruit named <code>Apple</code> as <code>apple</code>, <code>Apple</code>, <code>aPPLe</code>, <code>ApplE</code>, etc... This makes the user experience much smoother.</p>
+<p><code>split_words()</code> is used to split the text buffer from the user input into individual parts that correspond with the format specified in the <code>Commands</code> like  <code>COMMAND  QUANTITY_IN_KG FRUIT_NAME</code>.</p>
+<h4 id="in-memory-database"><a class="header" href="#in-memory-database">In-memory Database</a></h4>
+<p>Instead of doing database I/O by querying SQLite database every time we need to check the existence of data, we will use an in-memory database described by <code>MemDB</code> which contains  a <code>Mutex&lt;HashMap&lt;String, MyTodosModel&gt;&gt;</code> scoped to the internals of the crate. This is a <code>HashMap</code> indexed using a <code>String</code> which is the name of the todo in the <code>Model</code> and the value of the indexing key set to the <code>MyTodosModel</code>. The HashMap is protected by a <code>Mutex</code> for thread-safety.</p>
+<h4 id="formatting-the-todo-list"><a class="header" href="#formatting-the-todo-list">Formatting the TODO List</a></h4>
+<p>To format the list of TODOs in local cache and display them to the command-line interface, add the following to the </p>
+<p><code>File: src/utils.rs</code></p>
+<pre><code class="language-rust no_run noplayground">pub async fn format_todos(todo_models: &amp;MemDB) {
+    println!(&quot;\n\n\n&quot;);
+    if todo_models.lock().await.is_empty() {
+        println!(&quot;Oh My! There are no TODOs&quot;);
+    } else {
+        let mut done = Vec::&lt;MyTodosModel&gt;::default();
+        let mut not_done = Vec::&lt;MyTodosModel&gt;::default();
+
+        todo_models.lock().await.iter().for_each(|todo| {
+            if todo.1.status == 0 {
+                not_done.push(todo.1.to_owned());
+            } else {
+                done.push(todo.1.to_owned());
+            }
+        });
+
+        if not_done.is_empty() {
+            println!(&quot;Wohooo! All TODOs are Completed.&quot;)
+        } else {
+            println!(&quot;{QUANTITY:9}| {NOT_DONE:10}&quot;);
+            println!(&quot;----------------&quot;);
+            not_done.iter().for_each(|todo| {
+                println!(&quot;{:&gt;8} | {:10}&quot;, todo.quantity, todo.todo_name);
+            });
+            println!(&quot;----------------\n&quot;);
+        }
+
+        if done.is_empty() {
+            println!(&quot;----------------&quot;);
+            println!(&quot;Bummer :( You Have Not Completed Any TODOs!&quot;);
+            println!(&quot;----------------\n\n&quot;);
+        } else {
+            println!(&quot;{QUANTITY:9}| {DONE:10}&quot;);
+            println!(&quot;----------------&quot;);
+            done.iter().for_each(|todo| {
+                println!(&quot;{:&gt;8} | {:10}&quot;, todo.quantity, todo.todo_name);
+            });
+            println!(&quot;----------------\n&quot;);
+        }
+    }
+}
+
+</code></pre>
+<p><code>format_todos()</code> functions takes the in-memory database and loops through it, first checking if there are no TODOs  and prints <code>&quot;Oh My! There are no TODOs&quot;</code> . If TODOs are found, it iterates through them and sorts the <code>completed</code> todos into the <code>done</code> Vector declared by <code>let mut done = Vec::&lt;MyTodosModel&gt;::default();</code> or the <code>queued</code> into the <code>not_done</code> declared by <code>let mut not_done = Vec::&lt;MyTodosModel&gt;::default();</code> There are no completed TODOs but there are queued ones, it prints <code>&quot;Bummer :( You Have Not Completed Any TODOs!&quot;</code> and if there are no queued TODOs but completed ones, it prints <code>&quot;Wohooo! All TODOs are Completed.&quot;</code>. </p>
+<p>The <code>MyTodosModel</code> is the <code>Model</code> for the <code>Entity</code> table <code>todo_list</code> in the local SQLite database cache. </p>
+<p>Import the <code>utils</code> module in the <code>src/main.rs</code> file</p>
+<pre><code class="language-rust no_run noplayground">  mod common;
+  mod db_ops;
+  mod todo_list_table;
++ mod utils;
+
+  pub use common::*;
+  pub use db_ops::*;
+  pub use todo_list_table::prelude::*;
++ pub use utils::*;
+
+#[async_std::main]
+async fn main() -&gt; anyhow::Result&lt;()&gt; {
+    let db = database_config().await?;
+    create_todo_table(&amp;db).await?;
+
+    Ok(())
+}
+
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="client.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="remote-db.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="client.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="remote-db.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </body>
+</html>

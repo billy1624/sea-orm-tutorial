@@ -1,0 +1,11 @@
+https://www.sea-ql.org/sea-orm-tutorial/SimpleCRUD/create_operation
+https://www.sea-ql.org/sea-orm-tutorial/SimpleCRUD/delete_operation
+https://www.sea-ql.org/sea-orm-tutorial/SimpleCRUD/foreign_key_insert
+https://www.sea-ql.org/sea-orm-tutorial/SimpleCRUD
+https://www.sea-ql.org/sea-orm-tutorial/SimpleCRUD/insert_operations
+https://www.sea-ql.org/sea-orm-tutorial/SimpleCRUD/introduction
+https://www.sea-ql.org/sea-orm-tutorial/SimpleCRUD/read_operation
+https://www.sea-ql.org/sea-orm-tutorial/SimpleCRUD/related_tables
+https://www.sea-ql.org/sea-orm-tutorial/SimpleCRUD/relationships
+https://www.sea-ql.org/sea-orm-tutorial/SimpleCRUD/simple_crud_operations
+https://www.sea-ql.org/sea-orm-tutorial/SimpleCRUD/update_operation

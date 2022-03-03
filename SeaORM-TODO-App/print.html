@@ -1,0 +1,2003 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js navy">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>SeaORM-TODO-App</title>
+        <meta name="robots" content="noindex" />
+
+
+        <!-- Custom HTML head -->
+        
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "navy";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('navy')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="tcp-server.html"><strong aria-hidden="true">2.</strong> Building The TCP Server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="tables.html"><strong aria-hidden="true">2.1.</strong> Creating Tables</a></li><li class="chapter-item expanded "><a href="server.html"><strong aria-hidden="true">2.2.</strong> Building Server Connections and Responses</a></li></ol></li><li class="chapter-item expanded "><a href="client.html"><strong aria-hidden="true">3.</strong> Building The TODO TCP Client</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="utils.html"><strong aria-hidden="true">3.1.</strong> Formating Utilities</a></li><li class="chapter-item expanded "><a href="remote-db.html"><strong aria-hidden="true">3.2.</strong> Remote Database Operations</a></li><li class="chapter-item expanded "><a href="stdout.html"><strong aria-hidden="true">3.3.</strong> Reading User Input</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">SeaORM-TODO-App</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/SeaQL/sea-orm-tutorial" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
+<p>A simple TODO app that demostrates using SeaORM, SQLite and Postgres to build a simple TODO application. TCP connections are used instead of web frameworks for simplicity due to the APIs being available in the standard library, which is mirrored by async-std async library. </p>
+<p>Let's get started.</p>
+<h4 id="symbols-used"><a class="header" href="#symbols-used">Symbols Used</a></h4>
+<p>To show added or removed code from files, we will use comments or </p>
+<p><code>+</code> to show added code</p>
+<p><code>-</code> to show removed code</p>
+<p><code>...</code> is used to show only part of the existing code instead of rewriting already existing code in the examples.</p>
+<p><code>$ </code> shows an operation is done on the console/shell </p>
+<p><code>postgres=#</code> shows a postgres prompt</p>
+<p>This will make it easier to visualize changes to a file</p>
+<p>First, install PostgreSQL and SQLite and ensure PostgreSQL server is running.</p>
+<h4 id="create-a-cargo-workspace-for-the-server-and-frontend"><a class="header" href="#create-a-cargo-workspace-for-the-server-and-frontend">Create a cargo workspace for the server and frontend</a></h4>
+<ol>
+<li>
+<p>Create a new directory <code>SeaORM-TODO-App</code>, a <code>Cargo.toml</code> file, a <code>TODO-Server</code> and a <code>TODO-Client</code>. The <code>TODO-Server</code> will contain the source code for the TCP server while the <code>TODO-Client</code> will contain the source code for the front-end.</p>
+<pre><code class="language-sh">$ mkdir SeaORM-TODO-App
+
+$ cd SeaORM-TODO-App
+
+$ cargo new TODO-Server --name todo-server
+
+$ cargo new TODO-Client --name todo-client
+</code></pre>
+<p>Then register the cargo projects with the <code>cargo workspace</code> by creating a workspace file in the current directory.</p>
+<p><strong>File</strong>:<em>SeaORM-TODO-App/Cargo.toml</em> file</p>
+<pre><code class="language-TOML">[workspace]
+members = [
+	&quot;TODO-Server&quot;,
+	&quot;TODO-Client&quot;,
+]
+</code></pre>
+</li>
+</ol>
+<p>Next, we will build the TCP server</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="building-the-tcp-server"><a class="header" href="#building-the-tcp-server">Building The TCP Server</a></h1>
+<h4 id="install-necessary-dependencies"><a class="header" href="#install-necessary-dependencies">Install necessary dependencies</a></h4>
+<ol>
+<li>
+<p>Switch to the <code>SeaORM-TODO-App/TODO-Server</code> directory to build the TCP server</p>
+<pre><code class="language-sh">$ cd TODO-Server
+</code></pre>
+</li>
+<li>
+<p>Ensure you have installed Rust programming language <a href="https://www.rust-lang.org/tools/install">https://www.rust-lang.org/tools/install</a></p>
+</li>
+<li>
+<p>Ensure you have <code>sea-orm-cli</code> installed <a href="https://crates.io/crates/sea-orm-cli">https://crates.io/crates/sea-orm-cli</a></p>
+</li>
+<li>
+<p><code>async-std</code> will be used as the async library</p>
+<pre><code class="language-sh">$ cargo add async-std --features attributes
+</code></pre>
+<p>This adds async-std <code>src/Cargo.toml</code> file</p>
+<pre><code class="language-toml">[package]
+name = &quot;sea-orm-todo&quot;
+version = &quot;0.1.0&quot;
+edition = &quot;2021&quot;
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
++ async-std = { version = &quot;1.10.0&quot;, features = [&quot;attributes&quot;] }
+</code></pre>
+</li>
+<li>
+<p>Add <code>anyhow</code> crate for error handling</p>
+<pre><code class="language-sh">$ cargo add anyhow
+</code></pre>
+<p>An entry in the<code>Cargo.toml</code> file is added</p>
+<pre><code class="language-toml">[package]
+name = &quot;todo-client&quot;
+version = &quot;0.1.0&quot;
+edition = &quot;2021&quot;
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
++ anyhow = &quot;1.0.53&quot;
+  async-std = { version = &quot;1.10.0&quot;, features = [&quot;attributes&quot;] }
+
+</code></pre>
+</li>
+<li>
+<p>Add sea-orm with the features to enable sql drivers for PostgreSQL backend </p>
+<pre><code class="language-sh">$  cargo add sea-orm --no-default-features --features &quot;runtime-async-std-rustls sqlx-postgres macros&quot;
+</code></pre>
+<p>This adds sea-orm to <code>src/Cargo.toml</code> </p>
+<pre><code class="language-toml">[package]
+name = &quot;sea-orm-todo&quot;
+version = &quot;0.1.0&quot;
+edition = &quot;2021&quot;
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+  anyhow = &quot;1.0.53&quot;
+  async-std = { version = &quot;1.10.0&quot;, features = [&quot;attributes&quot;] }
++ sea-orm = { version = &quot;0.6.0&quot;, features = [
++     &quot;runtime-async-std-rustls&quot;,
++     &quot;sqlx-postgres&quot;,
++     &quot;macros&quot;,
++ ], default-features = false }
+
+</code></pre>
+</li>
+<li>
+<p>Login to Postgres database and create a new user and database</p>
+<pre><code class="language-sh">$ sudo -u postgres psql postgres
+</code></pre>
+<p>Create a new user in the PostgreSQL prompt.</p>
+<pre><code class="language-sh">postgres=# CREATE ROLE webmaster LOGIN PASSWORD 'master_char';
+</code></pre>
+<p>Create the <code>fruits_market</code> database and assign it to the <code>webmaster</code> user</p>
+<pre><code class="language-sh">postgres=# CREATE DATABASE fruits_market WITH OWNER = webmaster;
+</code></pre>
+</li>
+<li>
+<p>Create a <code>.env</code> file in the workspace directory</p>
+<p>The file structure should look </p>
+<pre><code>SeaORM-TODO-App
+	|-- Cargo.toml
+	|-- TODO-Client
+			|-- src
+			|-- Cargo.toml
++   		|-- .env
+	|-- TODO-Server
+</code></pre>
+<p>Then add the PostgreSQL configuration with the new user <code>webmaster</code> and database <code>fruits_market</code>  we created earlier</p>
+<p>File: <code>SeaORM-TODO-App/TODO-Server/.env</code></p>
+<pre><code class="language-sh">+ DATABASE_URL=postgres://webmaster:master_char@localhost/fruits_market
+</code></pre>
+<p>Change the main function to async function using async-std</p>
+<pre><code class="language-rust no_run noplayground">- fn main() {
+-     println!(&quot;Hello, world!&quot;);
+- }
+
++ #[async_std::main]
++ async fn main() -&gt; anyhow::Result&lt;()&gt; {
++     Ok(())
++ }
+</code></pre>
+<p>Next, we will create all the required tables and their relationships</p>
+</li>
+</ol>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="creating-tables"><a class="header" href="#creating-tables">Creating Tables</a></h1>
+<p>First, create a database config for the <code>sea_orm::DatabaseConnection</code> to use to connect and authenticate to the PostgreSQL server.</p>
+<pre><code class="language-rust no_run noplayground">+ use async_std::sync::Arc;
++ use sea_orm::{Database, DbBackend};
+
+#[async_std::main]
+async fn main() -&gt; anyhow::Result&lt;()&gt; {
+    //Define the database backend
+    + let db_postgres = DbBackend::Postgres;
+
+    // Read the database environment from the `.env` file
+    + let env_database_url = include_str!(&quot;../.env&quot;).trim();
+    // Split the env url
+    + let split_url: Vec&lt;&amp;str&gt; = env_database_url.split(&quot;=&quot;).collect();
+    // Get item with the format `database_backend://username:password@localhost/database`
+    + let database_url = split_url[1];
+
+    // Perform a database connection
+    + let db = Database::connect(database_url).await?;
+    + let db = Arc::new(db);
+
+    Ok(())
+}
+</code></pre>
+<p>The <code>include_str!(&quot;../.env&quot;).trim();</code> reads the <code>.env</code> file and loads it's content at compile time. This content is the PostgreSQL database configuration which we later split using <code>split(&quot;=&quot;)</code> and discard the <code>DATABASE_URL=</code> part since it's only needed by <code>sea-orm-cli</code> and not <code> Database::connect()</code> which only accepts <code>database_backend://username:password@localhost/database</code>.</p>
+<p>Calling the <code>Database::connect()</code> on the parsed URL creates a <code>DatabaseConnection</code> that will perform all CRUD operations. This connection is kept behind an <code>async_std::sync::Arc</code> for thread safety when we <code>spawn</code> async tasks.</p>
+<p>Add the code to create the three tables, <code>todos</code>, <code>fruits</code> and <code>suppliers</code>.</p>
+<p><strong>FILE</strong>:<em><strong>src/main.rs</strong></em></p>
+<pre><code class="language-rust no_run noplayground">  use async_std::sync::Arc;
+- use sea_orm::{Database, DbBackend};
++ use sea_orm::{
++     sea_query::{Alias, ColumnDef, ForeignKey, ForeignKeyAction, Table},
++     ConnectionTrait, Database, DbBackend,
++ };
+
+#[async_std::main]
+async fn main() -&gt; anyhow::Result&lt;()&gt; {
+
+// --- code snippet ---
+
+// Create the fruits table
+    let fruits_table = Table::create()
+        .table(Alias::new(&quot;fruits&quot;))
+        .if_not_exists()
+        .col(
+            ColumnDef::new(Alias::new(&quot;fruit_id&quot;))
+                .integer()
+                .auto_increment()
+                .primary_key()
+                .not_null(),
+        )
+        .col(
+            ColumnDef::new(Alias::new(&quot;fruit_name&quot;))
+                .string()
+                .unique_key()
+                .not_null(),
+        )
+        .to_owned();
+
+    // Executing the SQL query to create the `fruits_table` in PostgreSQL
+    let create_table_op = db.execute(db_postgres.build(&amp;fruits_table)).await;
+    // Print the result in a user friendly way
+    println!(
+        &quot;`CREATE TABLE fruits` {:?}&quot;,
+        match create_table_op {
+            Ok(_) =&gt; &quot;Operation Successful&quot;.to_owned(),
+            Err(e) =&gt; format!(&quot;Unsuccessful - Error {:?}&quot;, e),
+        }
+    );
+
+    // Create the `todos` table
+    let todos_table = Table::create()
+        .table(Alias::new(&quot;todos&quot;))
+        .if_not_exists()
+        .col(
+            ColumnDef::new(Alias::new(&quot;todo_id&quot;))
+                .integer()
+                .auto_increment()
+                .primary_key()
+                .not_null(),
+        )
+        .col(
+            ColumnDef::new(Alias::new(&quot;username&quot;))
+                .string()
+                .unique_key()
+                .not_null(),
+        )
+        .col(ColumnDef::new(Alias::new(&quot;todo_list&quot;)).string())
+        .to_owned();
+
+    // Executing the SQL query to create the `todos` table in PostgreSQL
+    let create_table_op = db.execute(db_postgres.build(&amp;todos_table)).await;
+    // Print the result in a user friendly way
+    println!(
+        &quot;`CREATE TABLE todos` {:?}&quot;,
+        match create_table_op {
+            Ok(_) =&gt; &quot;Operation Successful&quot;.to_owned(),
+            Err(e) =&gt; format!(&quot;Unsuccessful - Error {:?}&quot;, e),
+        }
+    );
+    
+	Ok(())
+}
+</code></pre>
+<p>The previous tutorial gave an introduction on creating tables. <code>Table::create()</code> is the method to do this. Then the <code>db.execute()</code> method performs the database operation for table creation.</p>
+<p>Next, use <code>sea-orm-cli</code> to auto-generate the code for <code>Entity</code>, <code>Model</code>, <code>Relation</code> , etc...</p>
+<pre><code class="language-sh">$ sea-orm-cli generate entity -o src/todo_list_table -t todos #The todos table
+
+$ sea-orm-cli generate entity -o src/fruits_list_table -t fruits #The fruits table
+
+$ sea-orm-cli generate entity -o src/suppliers_list_table -t suppliers #The suppliers table
+</code></pre>
+<p>This generates new directories</p>
+<pre><code class="language-sh">SeaORM-TODO-App
+	|-- Cargo.toml
+	|-- .env
+	|-- src
++ 	|-- suppliers_list_table
++ 		|-- mod.rs
++ 		|-- prelude.rs
++ 		|-- suppliers.rs
++ 	|-- fruits_list_table
++ 		|-- mod.rs
++ 		|-- prelude.rs
++ 		|-- fruits.rs
++ 	|-- todo_list_table
++ 		|-- mod.rs
++ 		|-- prelude.rs
++ 		|-- todos.rs
+</code></pre>
+<p>Modify the <code>src/suppliers_list_table/prelude.rs</code> and import the types using friendly names.</p>
+<pre><code class="language-rust no_rust noplayground">- pub use super::suppliers::Entity as Suppliers;
+
++ pub use super::suppliers::{
++     ActiveModel as SuppliersActiveModel, Column as SuppliersColumn, Entity as Suppliers,
++     Model as SuppliersModel, PrimaryKey as SuppliersPrimaryKey, Relation as SuppliersRelation,
++ };
+</code></pre>
+<p>Do the same to the <code>src/fruits_table/prelude.rs</code></p>
+<pre><code class="language-rust no_run noplayground">- pub use super::fruits::Entity as Fruits;
+
++ pub use super::fruits::{
++     ActiveModel as FruitsActiveModel, Column as FruitsColumn, Entity as Fruits,
++     Model as FruitsModel, PrimaryKey as FruitsPrimaryKey, Relation as FruitsRelation,
++ };
+</code></pre>
+<p>Do the same ot the <code>src/todos_table/prelude.rs</code></p>
+<pre><code class="language-rust no_run noplayground">//! SeaORM Entity. Generated by sea-orm-codegen 0.5.0
+- pub use super::todos::Entity as Todos;
+
++ pub use super::todos::{
++     ActiveModel as TodosActiveModel, Column as TodosColumn, Entity as Todos, Model as TodosModel,
++     PrimaryKey as TodosPrimaryKey, Relation as TodosRelation,
++ };
+</code></pre>
+<p>Modify the <code>Model</code> and <code>Relation</code> part of <code>Suppliers</code> Entity to  import <code>Fruits</code> entity properly</p>
+<pre><code class="language-rust no_run noplayground">//! SeaORM Entity. Generated by sea-orm-codegen 0.6.0
+
+use sea_orm::entity::prelude::*;
+
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel)]
+#[sea_orm(table_name = &quot;suppliers&quot;)]
+pub struct Model {
+    #[sea_orm(primary_key)]
+    pub suppliers_id: i32,
+    #[sea_orm(unique)]
+    pub suppliers_name: String,
+    pub fruit_id: i32,
+}
+
+#[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
+pub enum Relation {
+    #[sea_orm(
+-		belongs_to = &quot;super::fruits::Entity&quot;,
++		belongs_to = &quot;crate::Fruits&quot;,
+        from = &quot;Column::FruitId&quot;,
+-		to = &quot;super::fruits::Column::FruitId&quot;,
++		to = &quot;crate::FruitsColumn::FruitId&quot;,
+        on_update = &quot;Cascade&quot;,
+        on_delete = &quot;Cascade&quot;
+    )]
+    Fruits,
+}
+
+- impl Related&lt;super::fruits::Entity&gt; for Entity {
++ impl Related&lt;crate::Fruits&gt; for Entity {
+    fn to() -&gt; RelationDef {
+        Relation::Fruits.def()
+    }
+}
+
+impl ActiveModelBehavior for ActiveModel {}
+
+</code></pre>
+<p>Import these modules into <code>src/main.rs</code></p>
+<pre><code class="language-rust no_run noplayground">// --- code snippet ---
++ mod fruits_list_table;
++ mod suppliers_list_table;
++ mod todo_list_table;
+
++ pub use fruits_list_table::prelude::*;
++ pub use suppliers_list_table::prelude::*;
++ pub use todo_list_table::prelude::*;
+
+#[async_std::main]
+async fn main() -&gt; anyhow::Result&lt;()&gt; {
+    // --- code snippet ---
+    
+    Ok(())
+ }
+</code></pre>
+<p>Next, populate the <code>fruits</code> and <code>suppliers</code> tables with data.</p>
+<p>Create a new file <code>src/insert_values.rs</code> and add the following code:</p>
+<pre><code class="language-rust no_run noplayground">use crate::{Fruits, FruitsActiveModel, Suppliers, SuppliersActiveModel};
+use sea_orm::{DatabaseConnection, EntityTrait, Set};
+
+// Insert suppliers in the `suppliers` table
+pub async fn insert_fruits(db: &amp;DatabaseConnection) -&gt; anyhow::Result&lt;()&gt; {
+
+    let apple = FruitsActiveModel {
+        fruit_name: Set(&quot;Apple&quot;.to_owned()),
+        ..Default::default()
+    };
+
+    let orange = FruitsActiveModel {
+        fruit_name: Set(&quot;Orange&quot;.to_owned()),
+        ..Default::default()
+    };
+
+    let mango = FruitsActiveModel {
+        fruit_name: Set(&quot;Mango&quot;.to_owned()),
+        ..Default::default()
+    };
+
+    let pineapple = FruitsActiveModel {
+        fruit_name: Set(&quot;Pineapple&quot;.to_owned()),
+        ..Default::default()
+    };
+
+    let fruit_insert_operation = Fruits::insert_many(vec![apple, orange, mango, pineapple])
+        .exec(db)
+        .await;
+
+    println!(&quot;INSERTED FRUITS: {:?}&quot;, fruit_insert_operation?);
+
+    Ok(())
+}
+</code></pre>
+<p>Here, <code>ActiveModel</code> is used to prepare the data for insertion into the database using <code>Entity::insert()</code> .</p>
+<p>Import this module to the <code>src/main.rs</code> file and call these functions to perform insert operations</p>
+<pre><code class="language-rust no_run noplayground">// --- code snippet ---
++ mod insert_values;
++ pub use insert_values::*;
+
+#[async_std::main]
+async fn main() -&gt; anyhow::Result&lt;()&gt; {
+    // --- code snippet ---
+    
++	 insert_fruits(&amp;db).await?;
++    insert_suppliers(&amp;db).await?;
+    
+     Ok(())
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="building-server-connections-and-responses"><a class="header" href="#building-server-connections-and-responses">Building Server Connections and Responses</a></h1>
+<p>Create a new director in the <code>src</code> folder called <code>server</code>.</p>
+<p>Inside the <code>server</code> directory create <code>mod.rs</code>, <code>tcp_api.rs</code> and <code>connection.rs</code> </p>
+<pre><code class="language-sh">SeaORM-TODO-App/src
+				|-- src/fruits_table
+                |-- src/insert_values.rs
+                |-- src/main.rs
+                |-- src/suppliers_table
+                |-- src/todos_table 
+                |-- src/server
++                	|-- mod.rs
++                	|-- tcp_api.rs
++                	|-- connection.rs
+</code></pre>
+<p>Import the new submodules to <code>src/server/mod.rs</code> file</p>
+<pre><pre class="playground"><code class="language-rust no_run no_playground">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>mod tcp_api;
+mod connection;
+
+pub use tcp_api::*;
+pub use connection::*;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Then register the module to the <code>src.main.rs</code> file</p>
+<pre><code>// -- code snippet --
+
+mod server;
+pub use server::*;
+
+#[async_std::main]
+async fn main() -&gt; anyhow::Result&lt;()&gt; {
+	// -- code snippet --
+	
+	Ok(())
+}
+</code></pre>
+<h4 id="the-tcp-api"><a class="header" href="#the-tcp-api">The TCP API</a></h4>
+<p>Create the commands that the tcp api will handle. In the <code>src/server/tcp_api.rs</code> add:</p>
+<pre><code class="language-rust no_run noplayground">use serde::{Serialize, Deserialize};
+
+// The commands to use to perform CRUD operations on PostgreSQL
+#[derive(Debug, Serialize, Deserialize)]
+pub enum Command {
+    Store { username: String, todo_list: String },
+    UpdateTodoList { username: String, todo_list: String },
+    Get(String),
+    CreateUser(String),
+    ListFruits,
+}
+</code></pre>
+<p><code>Command::Store { username: String, todo_list: String }</code> will handle an insert operation, inserting the <code>todo_list</code> in the row with the column labeled by <code>username</code>.</p>
+<p><code>Command::UpdateTodoList { username: String, todo_list: String }</code> will handle an update operation, inserting the <code>todo_list</code> in the row with the column labeled by <code>username</code>.</p>
+<p><code>Command::Get(String)</code> will fetch the <code>todo_list</code> from the column <code>username</code> with the username in the <code>String</code> field.</p>
+<p><code>Command::CreateUser(String)</code> will create a new row with the <code>String</code> field being inserted in the <code>username</code> column.</p>
+<p><code>Command::ListFruits</code> will fetch all the fruits in the <code>fruits</code> table.</p>
+<p>The <code>Command</code> enum will be deserialized by <code>bincode</code> crate. Add the <code>bincode</code> and <code>serde</code> crates to <code>Cargo.toml</code> file</p>
+<pre><code class="language-sh">$ cargo add bincode
+
+$ cargo add serde --features derive
+</code></pre>
+<p>Add error handling capabilities incase the wrong command is invoked</p>
+<p><code>File: src/server/tcp_api.rs</code></p>
+<pre><code class="language-rust no_rust noplayground">// -- code snippet --
+
+#[derive(Debug)]
+pub enum ServerErrors {
+    InvalidCommand,
+    ModelNotFound,
+}
+
+impl Error for ServerErrors {
+    fn source(&amp;self) -&gt; Option&lt;&amp;(dyn Error + 'static)&gt; {
+        match self {
+            ServerErrors::InvalidCommand =&gt; Some(&amp;crate::ServerErrors::InvalidCommand),
+            ServerErrors::ModelNotFound =&gt; Some(&amp;crate::ServerErrors::ModelNotFound),
+        }
+    }
+}
+
+impl fmt::Display for ServerErrors {
+    fn fmt(&amp;self, f: &amp;mut fmt::Formatter&lt;'_&gt;) -&gt; fmt::Result {
+        write!(
+            f,
+            &quot;{:?}&quot;,
+            match self {
+                ServerErrors::InvalidCommand =&gt; &quot;Invalid command provided&quot;,
+                ServerErrors::ModelNotFound =&gt; &quot;The result of the query is `None`&quot;,
+            }
+        )
+    }
+}
+</code></pre>
+<p>The <code>ServerErrors::InvalidCommand</code> is returned when the method called on a <code>Command</code> is invalid while the <code>ServerErrors::ModelNotFound</code> is returned when a <code>Model</code> is not found in the database.</p>
+<p>Then implement the methods for the <code>Command</code> enum that will handle database operations</p>
+<p><code>File: src/server/tcp_api.rs</code></p>
+<pre><code class="language-rust no_run noplayground">// -- code snippet --
++ use crate::{Fruits, Suppliers, Todos, TodosActiveModel, TodosColumn, TodosModel};
++ use sea_orm::{
++     ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, ModelTrait, QueryFilter, Set,
++ };
+  use serde::{Deserialize, Serialize};
++ use std::{error::Error, fmt};
+
+// The commands to use to perform CRUD operations on PostgreSQL
+#[derive(Debug, Serialize, Deserialize)]
+pub enum Command {
+    Store { username: String, todo_list: String },
+    UpdateTodoList { username: String, todo_list: String },
+    Get(String),
+    CreateUser(String),
+    ListFruits,
+}
+
+
+</code></pre>
+<p>Implement methods to handle the commands from the api</p>
+<p><code>File: src/server/tcp_api.rs</code></p>
+<pre><code class="language-rust no_run noplayground">// -- code snippet --
+// The commands to use to perform CRUD operations on PostgreSQL
+#[derive(Debug, Serialize, Deserialize)]
+pub enum Command {
+    Store { username: String, todo_list: String },
+    UpdateTodoList { username: String, todo_list: String },
+    Get(String),
+    CreateUser(String),
+    ListFruits,
+}
+
+impl Command {
+    pub async fn get_fruits(&amp;self, db: &amp;DatabaseConnection) -&gt; anyhow::Result&lt;Vec&lt;u8&gt;&gt; {
+        let fruit_models = Fruits::find().all(db).await?;
+        let fruits = fruit_models
+            .iter()
+            .map(|fruit_model| fruit_model.fruit_name.clone())
+            .collect::&lt;Vec&lt;String&gt;&gt;();
+
+        Ok(bincode::serialize(&amp;fruits)?)
+    }
+
+    pub async fn store(&amp;self, db: &amp;DatabaseConnection) -&gt; anyhow::Result&lt;Vec&lt;u8&gt;&gt; {
+        match self {
+            Self::Store {
+                username,
+                todo_list,
+            } =&gt; {
+                let todo_user = TodosActiveModel {
+                    username: Set(username.to_owned()),
+                    todo_list: Set(Some(todo_list.to_owned())),
+                    ..Default::default()
+                };
+                Todos::insert(todo_user).exec(db).await?;
+
+                Ok(bincode::serialize(&quot;INSERTED&quot;)?)
+            }
+            _ =&gt; Err(anyhow::Error::new(ServerErrors::InvalidCommand)),
+        }
+    }
+
+    pub async fn create_new_user(&amp;self, db: &amp;DatabaseConnection) -&gt; anyhow::Result&lt;Vec&lt;u8&gt;&gt; {
+        match self {
+            Self::CreateUser(username) =&gt; {
+                let todo_user = TodosActiveModel {
+                    username: Set(username.to_owned()),
+                    ..Default::default()
+                };
+                Todos::insert(todo_user).exec(db).await?;
+
+                Ok(bincode::serialize(&amp;format!(&quot;CREATED_USER `{}`&quot;, username))?)
+            }
+            _ =&gt; Err(anyhow::Error::new(ServerErrors::InvalidCommand)),
+        }
+    }
+
+    pub async fn get_user_todo(&amp;self, db: &amp;DatabaseConnection) -&gt; anyhow::Result&lt;Vec&lt;u8&gt;&gt; {
+        match self {
+            Self::Get(user) =&gt; {
+                let get_todo = Todos::find()
+                    .filter(TodosColumn::Username.contains(user))
+                    .one(db)
+                    .await?;
+
+                if let Some(found_todo) = get_todo {
+                    Ok(bincode::serialize(&amp;found_todo.todo_list)?)
+                } else {
+                    Ok(bincode::serialize(&amp;Some(&quot;USER_NOT_FOUND&quot;))?)
+                }
+            }
+            _ =&gt; Err(anyhow::Error::new(ServerErrors::InvalidCommand)),
+        }
+    }
+
+    pub async fn update_todo_list(&amp;self, db: &amp;DatabaseConnection) -&gt; anyhow::Result&lt;Vec&lt;u8&gt;&gt; {
+        match self {
+            Self::UpdateTodoList {
+                username,
+                todo_list,
+            } =&gt; {
+                let found_todo: Option&lt;TodosModel&gt; = Todos::find()
+                    .filter(TodosColumn::Username.contains(username))
+                    .one(db)
+                    .await?;
+
+                match found_todo {
+                    Some(todo_model) =&gt; {
+                        let mut todo_model: TodosActiveModel = todo_model.into();
+                        todo_model.todo_list = Set(Some(todo_list.to_owned()));
+                        todo_model.update(db).await?;
+                    }
+                    None =&gt; return Err(anyhow::Error::new(ServerErrors::ModelNotFound)),
+                };
+
+                Ok(bincode::serialize(&quot;UPDATED_TODO&quot;)?)
+            }
+            _ =&gt; Err(anyhow::Error::new(ServerErrors::InvalidCommand)),
+        }
+    }
+}
+
+</code></pre>
+<p>The <code>get_fruits()</code> method  handles the <code>Command::ListFruits</code>  command and it is responsible for fetching the list of fruits in the database.</p>
+<p>The <code>store()</code> method handles the <code>Command:: Store {..}</code> command and it inserts the field <code>todo_list</code> in the <code>username</code> column corresponding to the <code>username</code> field.</p>
+<p>The <code>create_new_user()</code> method handles <code>Command::CreateUser(..)</code> command, it creates a new user by inserting the <code>String</code> field data to the <code>username</code> column and an empty entry in the <code>todo_list</code> column.</p>
+<p>The <code>get_user_todo()</code> method handles <code>Command::Get(..)</code> command. It is used mostly to check if the user in the <code>String</code> field exists in the <code>username</code> column.</p>
+<p>The <code>update_todo_list()</code> method handles the <code>Command:: UpdateTodoList {..}</code> command and it updates the field <code>todo_list</code> in the <code>username</code> column corresponding to the <code>username</code> field.</p>
+<h4 id="the-tcp-api-handler"><a class="header" href="#the-tcp-api-handler">The TCP API handler</a></h4>
+<p>The <code>TcpStream</code> will need to be handled. The <code>src/server/connection.rs</code> file contains the code for this.</p>
+<p><code>File: src/server/connection.rs</code></p>
+<pre><code class="language-rust no_run.noplayground">// Import the necessary async versions of TcpStream and TcpListener
+use crate::Command;
+use async_std::{
+    net::{Shutdown, SocketAddr, TcpListener, TcpStream},
+    prelude::*,
+    sync::Arc,
+    task,
+};
+
+use sea_orm::DatabaseConnection;
+
+const BUFFER_DATA_CAPACITY: usize = 1024 * 1024; // The todo list should not exceed 1MiB
+const BUFFER_CAPACITY: usize = 64 * 1024; //64Kib
+
+// function is called to create a new server on port 8080 localhost
+pub async fn start_server(db: Arc&lt;DatabaseConnection&gt;) -&gt; anyhow::Result&lt;()&gt; {
+    let listener = TcpListener::bind(&quot;127.0.0.1:8080&quot;).await?;
+    println!(&quot;Listening on 127.0.0.1:8080&quot;);
+
+    while let Some(stream) = listener.incoming().next().await {
+        let stream = stream?;
+        let db = db.clone();
+
+        task::spawn(async move {
+            match process_stream(db, stream).await {
+                Ok(addr) =&gt; {
+                    println!(&quot;x → {addr:?} - DISCONNECTED&quot;)
+                }
+                Err(error) =&gt; {
+                    eprintln!(&quot;{:?}&quot;, error);
+                }
+            }
+        })
+        .await;
+    }
+
+    Ok(())
+}
+
+async fn process_stream(
+    db: Arc&lt;DatabaseConnection&gt;,
+    mut stream: TcpStream,
+) -&gt; anyhow::Result&lt;SocketAddr&gt; {
+    let peer = stream.peer_addr()?;
+    println!(&quot;← → {peer:?} - CONNECTED&quot;);
+    let mut buffer = [0u8; BUFFER_CAPACITY];
+    let mut command_buffer: Vec&lt;u8&gt; = Vec::new();
+    let bytes_read = stream.read(&amp;mut buffer).await?;
+    while bytes_read != 0 {
+        if command_buffer.len() &gt; BUFFER_DATA_CAPACITY {
+            handle_response(&amp;mut stream, b&quot;BUFFER_CAPACITY_EXCEEDED_1MiB&quot;.to_vec()).await?;
+        }
+
+        // Check if the current stream is less than the buffer capacity, if so all data has been received
+        if buffer[..bytes_read].len() &lt; BUFFER_CAPACITY {
+            // Ensure that the data is appended before being deserialized by bincode
+            command_buffer.append(&amp;mut buffer[..bytes_read].to_owned());
+            let dbop_result = process_database_op(&amp;db, &amp;command_buffer).await?;
+            handle_response(&amp;mut stream, dbop_result).await?;
+            break;
+        }
+        // Append data to buffer
+        command_buffer.append(&amp;mut buffer[..bytes_read].to_owned());
+    }
+
+    let peer = stream.peer_addr()?;
+    //Shutdown the TCP address
+    stream.shutdown(Shutdown::Both)?;
+    // Terminate the stream if the client terminates the connection by sending 0 bytes
+    return Ok(peer);
+}
+
+async fn handle_response(stream: &amp;mut TcpStream, reponse_data: Vec&lt;u8&gt;) -&gt; anyhow::Result&lt;()&gt; {
+    stream.write_all(&amp;reponse_data).await?;
+
+    stream.flush().await?;
+
+    Ok(())
+}
+
+async fn process_database_op(
+    db: &amp;DatabaseConnection,
+    command_buffer: &amp;[u8],
+) -&gt; anyhow::Result&lt;Vec&lt;u8&gt;&gt; {
+    let command: Command = bincode::deserialize(command_buffer)?;
+
+    let db_op = match command {
+        Command::Get(..) =&gt; command.get_user_todo(db).await,
+        Command::CreateUser(..) =&gt; command.create_new_user(db).await,
+        Command::ListFruits =&gt; command.get_fruits(db).await,
+        Command::ListSuppliers =&gt; command.get_suppliers(db).await,
+        Command::Store { .. } =&gt; command.store(db).await,
+        Command::UpdateTodoList { .. } =&gt; command.update_todo_list(db).await,
+        Command::DeleteUser(..) =&gt; command.delete_user(db).await,
+    };
+
+    match db_op {
+        Ok(value) =&gt; Ok(value),
+        Err(error) =&gt; Ok(bincode::serialize(&amp;error.to_string())?),
+    }
+}
+
+</code></pre>
+<p>Here, the <code>BUFFER_DATA_CAPACITY</code> caps the TODO list data at <code>1MiB</code> and limits the buffer capacity for the TCP stream using <code>BUFFER_CAPACITY</code> capped at <code>64KiB</code>.</p>
+<p>The <code>start_server()</code> function  creates a <code>TcpListener</code> at port <code>8080</code> localhost IP <code>127.0.0.1</code>. It  accepts a database connection inside an <code>Arc&lt;DatabaseConnection&gt;</code> for thread safety when we spawn a task to handle the stream. Each <code>TcpStream</code> is handled asynchronously using a <code>async::task::spawn()</code> method. </p>
+<p><code>stream.read(&amp;mut buffer).await?;</code> reads the stream. The while loop loops until the stream returns a <code>0_usize</code> indicating the connection has been closed by the peer and if data has been received, it checks if the data has exceeded the </p>
+<p><code>BUFFER_DATA_CAPACITY</code> of <code>1MiB</code>, if not it decodes the buffer using <code>bincode</code> and passes the data to the <code>process_database_op()</code> function which matches the deserialized <code>Command</code> and calls the appropriate method which in turn performs the database operation, encodes the result of the database operation and writes it back to the peer using the <code>handle_response()</code> function.</p>
+<h4 id="start-the-server"><a class="header" href="#start-the-server">Start the server</a></h4>
+<p>Lastly, inside the <code>src/main.rs</code> file, start the server</p>
+<p><code>File: src/main.rs</code></p>
+<pre><code class="language-rust no_run noplayground">use async_std::sync::Arc;
+use sea_orm::{
+    sea_query::{Alias, ColumnDef, ForeignKey, ForeignKeyAction, Table},
+    ConnectionTrait, Database, DbBackend,
+};
+
+// -- code snippet --
+
+#[async_std::main]
+async fn main() -&gt; anyhow::Result&lt;()&gt; {
+
+	// -- code snippet --
+	
+	
+    insert_fruits(&amp;db).await?;
+    insert_suppliers(&amp;db).await?;
+
++	start_server(db).await?;
+
+    Ok(())
+}
+
+</code></pre>
+<p>Run the program using <code>cargo run</code>. It print the following to the terminal</p>
+<pre><code class="language-sh">$ Running `/media/su43/IGIED-01/Rust-Projects/SeaQL/SeaORM-TODO-App/target/debug/todo-server`
+`CREATE TABLE fruits` &quot;Operation Successful&quot;
+`CREATE TABLE suppliers` &quot;Operation Successful&quot;
+`CREATE TABLE todos` &quot;Operation Successful&quot;
+INSERTED FRUITS: InsertResult { last_insert_id: 1 }
+INSERTED SUPPLIERS: InsertResult { last_insert_id: 1 }
+Listening on 127.0.0.1:8080
+</code></pre>
+<p>The server is now listening on <code>127.0.0.1:8080</code> for incoming <code>TcpStream</code>s.</p>
+<p>Next, we build the client.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="building-the-todo-tcp-client"><a class="header" href="#building-the-todo-tcp-client">Building The TODO TCP Client</a></h1>
+<p>This chapter focuses on creating the TCP client. Switch to the <code>TODO-Client</code> directory in the workspace.</p>
+<h4 id="configuration"><a class="header" href="#configuration">Configuration</a></h4>
+<p>Add the necessary dependencies to create the client.</p>
+<pre><code class="language-sh">$ cargo add async-std --features attributes
+
+$ cargo add anyhow
+
+$ cargo add bincode
+
+$ cargo add serde --features derive
+
+$ cargo add serde_json
+</code></pre>
+<p><code>bincode</code> crate will be used to prepare the bytes of  <code>Command</code> to send over the wire. <code>serde_json</code> crate will serialize the TODO list data structure that contains queued and completed TODOs into a JSON string for remote storage in the PostgreSQL database.</p>
+<p>The TCP client will also store local cache, simulating a real world setup especially for a desktop or mobile client. SQLite will be the preferred database for this tutorial due to it's popularity. A command line frontend and a TCP stream will be used to keep the tutorial simple and easy to port to other domains like mobile device connection, desktop clients or HTTP clients if you wish to explore other domains.</p>
+<p>Add <code>sea-orm</code> crate with the SQLite features enabled for the local persistent cache. The  runtime features <code>runtime-async-std-rustls</code> are used since the async library for this client is <code>async-std</code> crate.</p>
+<pre><code class="language-sh">$ cargo add sea-orm  --features &quot;runtime-async-std-rustls sqlx-sqlite macros&quot; --no-default-features
+</code></pre>
+<p>Modify the main function in  <code>src/main.rs</code> to use async-std</p>
+<pre><code class="language-rust no_run noplayground">- fn main() {
+-     println!(&quot;Hello, world!&quot;);
+- }
+
++ #[async_std::main]
++ async fn main() -&gt; anyhow::Result&lt;()&gt;{
++     Ok(())
++ }
+</code></pre>
+<p>Next, create a <code>.env</code> file in the current directory. This will contain the database configuration.</p>
+<p><code>File: TODO-Client/.env</code></p>
+<pre><code class="language-sh">DATABASE_URL=sqlite://my_todos.db
+</code></pre>
+<p>Here, the <code>sqlite</code> URL does not take a <code>username</code>, <code>password</code> and <code>IP</code> since SQLite does not have have a server, just the database name <code>my_todos.db</code>.</p>
+<p>Create an empty SQLite database using the command:</p>
+<pre><code class="language-sh">$ sqlite3 my_todos.db &quot;VACUUM;&quot;
+</code></pre>
+<p>The <code>&quot;VACUUM;&quot;</code> part of the command will ensure the created database is not just held in memory but also persisted to the file system even though it is empty.</p>
+<h4 id="local-sqlite-database-operations"><a class="header" href="#local-sqlite-database-operations">Local SQLite Database Operations</a></h4>
+<p>Create a file <code>src/db_ops.rs</code> which will contain functions to perform database operations.</p>
+<pre><code class="language-rust no_run noplayground">use async_std::{
+    io::{ReadExt, WriteExt},
+    net::TcpStream,
+};
+use sea_orm::{
+    sea_query::{Alias, ColumnDef, Table},
+    ActiveModelTrait, ConnectionTrait, Database, DatabaseConnection, EntityTrait, Set,
+};
+
+pub async fn database_config() -&gt; Result&lt;DatabaseConnection, sea_orm::DbErr&gt; {
+    // Read the database environment from the `.env` file
+    let env_database_url = include_str!(&quot;../.env&quot;).trim();
+    // Split the env url
+    let split_url: Vec&lt;&amp;str&gt; = env_database_url.split(&quot;=&quot;).collect();
+    // Get item with the format `database_backend://username:password@localhost/database`
+    let database_url = split_url[1];
+
+    Database::connect(database_url).await
+}
+
+
+pub async fn create_todo_table(db: &amp;DatabaseConnection) -&gt; anyhow::Result&lt;()&gt; {
+    let database_backend = db.get_database_backend();
+    // Create the `todos` table
+    let todos_table = Table::create()
+        .table(Alias::new(&quot;todo_list&quot;))
+        .if_not_exists()
+        .col(
+            ColumnDef::new(Alias::new(&quot;todo_id&quot;))
+                .integer()
+                .primary_key()
+                .not_null()
+                .auto_increment(),
+        )
+        .col(
+            ColumnDef::new(Alias::new(&quot;todo_name&quot;))
+                .string()
+                .unique_key()
+                .not_null(),
+        )
+        .col(ColumnDef::new(Alias::new(&quot;quantity&quot;)).string().not_null())
+        .col(ColumnDef::new(Alias::new(&quot;status&quot;)).boolean().not_null())
+        .to_owned();
+    let create_table_op = db.execute(database_backend.build(&amp;todos_table)).await;
+
+    // Executing the SQL query to create the `todos` table in SQLite
+    let create_table_op = db.execute(database_backend.build(&amp;todos_table)).await;
+    // Print the result in a user friendly way
+    println!(
+        &quot;`CREATE TABLE todo_list` {:?}&quot;,
+        match create_table_op {
+            Ok(_) =&gt; &quot;Operation Successful&quot;.to_owned(),
+            Err(e) =&gt; format!(&quot;Unsuccessful - Error {:?}&quot;, e),
+        }
+    );
+
+    Ok(())
+}
+
+</code></pre>
+<p><code>database_config()</code> reads the <code>.env</code> file and parses the database URL, creates a database connection with the URL using <code>Database::connect()</code> and then returns a <code>DatabaseConnection</code>.</p>
+<p><code>create_todo_table()</code> when invoked will create a new <code>todo_list</code> table in the local SQLite database specified by the URL.</p>
+<p>Import the <code>db_ops</code> module into <code>src/main.rs</code>	 and call both functions.</p>
+<pre><code class="language-rust no_run noplayground">+ mod db_ops;
++ pub use db_ops::*;
+
+#[async_std::main]
+async fn main() -&gt; anyhow::Result&lt;()&gt; {
++	let db = database_config().await?;
++	create_todo_table(&amp;db).await?;
+    
+    Ok(())
+}
+
+</code></pre>
+<p>Next is to auto-generate the <code>Model</code>, <code>ActiveModel</code> , <code>Entity</code>, etc... using the <code>sea-orm-cli</code> and pass in <code>--with-serde both</code> feature flag to auto-generate <code>serde::Serialize</code> and <code>serde::Deserialize</code> on the Entity.</p>
+<pre><code class="language-sh">$ sea-orm-cli generate entity -o src/todo_list_table -t todo_list --with-serde both
+</code></pre>
+<p>This will create a new directory <code>todo_list_table</code> in the <code>src/</code> directory. </p>
+<p>Open the <code>src/todo_list_table/prelude.rs</code> file and import the <code>Entity</code>, <code>Model</code> and <code>ActiveModel</code> using friendly names.</p>
+<p><code>File:src/todo_list_table/prelude.rs</code></p>
+<pre><code class="language-rust no_run noplayground">//! SeaORM Entity. Generated by sea-orm-codegen 0.6.0
+
+- pub use super::todo_list::Entity as TodoList;
+
++ pub use super::todo_list::{
++     ActiveModel as MyTodosActiveModel, Column as MyTodosColumn, Entity as MyTodos,
++     Model as MyTodosModel, PrimaryKey as MyTodosPrimaryKey, Relation as MyTodosRelation,
++ };
+
+</code></pre>
+<p>Import the modules to the <code>src/main.rs</code> file</p>
+<pre><code class="language-rust no_run noplayground">  mod db_ops;
++ mod todo_list_table;
+
+  pub use db_ops::*;
++ pub use todo_list_table::prelude::*;
+
+#[async_std::main]
+async fn main() -&gt; anyhow::Result&lt;()&gt; {
+    let db = database_config().await?;
+    create_todo_table(&amp;db).await?;
+
+    Ok(())
+}
+
+</code></pre>
+<h4 id="common-data-structures"><a class="header" href="#common-data-structures">Common Data Structures</a></h4>
+<p>To perform more database operations, create a <code>common.rs</code>  file in the <code>src</code> directory. This file will contain common data structures for use throughout database operations and TCP connections.</p>
+<p><code>File: src/common.rs</code></p>
+<pre><code class="language-rust no_run noplayground">use crate::MyTodosModel;
+use serde::{Deserialize, Serialize}; // The commands to use to perform CRUD operations on PostgreSQL
+
+// The commands to use to perform CRUD operations on PostgreSQL
+#[derive(Debug, Serialize, Deserialize)]
+pub enum Command {
+    Store { username: String, todo_list: String },
+    UpdateTodoList { username: String, todo_list: String },
+    Get(String),
+    CreateUser(String),
+    ListFruits,
+}
+
+//  The structure for a TodoList
+#[derive(Debug, Serialize, Default, Deserialize)]
+pub struct TodoList {
+    pub queued: Vec&lt;MyTodosModel&gt;,
+    pub completed: Vec&lt;MyTodosModel&gt;,
+}
+
+</code></pre>
+<p>The enum <code>Command</code> mirrors the <code>Command</code> created in the previous chapter in the <code>TODO-Server/src/tcp_api.rs</code> file.</p>
+<p>The <code>TodoList</code> struct contains the <code>Model</code>s <code>MyTodoModel</code> sorted either as <code>queued</code> which are TODOs not done or <code>completed</code> which are <code>TODO</code>s that are done.</p>
+<p>Import this file to the <code>src/main.rs</code> file</p>
+<pre><code class="language-rust no_run noplayground">+ mod common;
+  mod db_ops;
+  mod todo_list_table;
+
++ pub use common::*;
+  pub use db_ops::*;
+  pub use todo_list_table::prelude::*;
+
+#[async_std::main]
+async fn main() -&gt; anyhow::Result&lt;()&gt; {
+    let db = database_config().await?;
+    create_todo_table(&amp;db).await?;
+
+    Ok(())
+}
+
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="formating-utilities"><a class="header" href="#formating-utilities">Formating Utilities</a></h1>
+<p>To create a better user experience, data will be formatted before it is displayed to the command line on <code>stdout</code>.</p>
+<h4 id="overview-of-code-formatting"><a class="header" href="#overview-of-code-formatting">Overview of Code Formatting</a></h4>
+<p>Create a <code>utils.rs</code> file which will hold the utilities and add the following code blocks:</p>
+<p><code>File: src/utils.rs</code></p>
+<pre><code class="language-rust no_run noplayground">use crate::MyTodosModel;
+use async_std::sync::Mutex;
+use std::collections::HashMap;
+
+pub(crate) const TITLE: &amp;str = &quot;FRUITS AVAILABLE&quot;;
+pub(crate) const NUMBER: &amp;str = &quot;No.&quot;;
+pub(crate) const ADD_COMMAND: &amp;str = &quot;ADD&quot;;
+pub(crate) const DONE_COMMAND: &amp;str = &quot;DONE&quot;;
+pub(crate) const UNDO_COMMAND: &amp;str = &quot;UNDO&quot;;
+pub(crate) const EDIT_COMMAND: &amp;str = &quot;EDIT&quot;;
+pub(crate) const EXIT_COMMAND: &amp;str = &quot;EXIT&quot;;
+
+
+const DONE: &amp;str = &quot;DONE TODOS&quot;;
+const NOT_DONE: &amp;str = &quot;NOT DONE&quot;;
+const QUANTITY: &amp;str = &quot;QUANTITY&quot;;
+
+pub(crate) type MemDB = Mutex&lt;HashMap&lt;String, MyTodosModel&gt;&gt;;
+
+pub fn clear_terminal() {
+    print!(&quot;\x1B[2J\x1B[1;1H&quot;);
+}
+
+pub fn synching() {
+    clear_terminal();
+    println!(&quot;SYNCING TO DATABASE...&quot;);
+}
+pub fn synching_to_server() {
+    println!(&quot;SYNCING TO SERVER...&quot;);
+}
+
+pub fn loading() {
+    clear_terminal();
+    println!(&quot;LOADING FROM DATABASE...&quot;);
+}
+
+pub fn convert_case(word: &amp;str) -&gt; String {
+    let word = word.to_lowercase();
+    let mut chars = word
+        .chars()
+        .map(|character| character.to_string())
+        .collect::&lt;Vec&lt;String&gt;&gt;();
+
+    chars[0] = chars[0].to_uppercase().to_string();
+
+    chars.into_iter().collect::&lt;String&gt;()
+}
+
+pub fn split_words(user_input: String) -&gt; Vec&lt;String&gt; {
+    user_input
+        .split(&quot; &quot;)
+        .map(|word| word.to_owned())
+        .collect::&lt;Vec&lt;String&gt;&gt;()
+}
+
+</code></pre>
+<p>The <code>TITLE</code> and <code>NUMBER</code> constants are used to format the headings for the <code>fruits</code> table which displays the list of fruits on the command-line interface. The constants <code>DONE</code>, <code>NOT_DONE</code> and <code>QUANTITY</code> are used as the headings of the TODO list.</p>
+<h4 id="interaction-commands"><a class="header" href="#interaction-commands">Interaction Commands</a></h4>
+<p>To interact with the client, a user will input a command, similar to pressing a button in a GUI or any other GUI event that performs an operation based on user input. The current list of commands are:</p>
+<p>The <code>ADD_COMMAND</code> constant holds the <code>ADD</code> command. This command allows a user to <code>queue</code> a task in the TODO list. The format is <code>ADD  QUANTITY_IN_KG FRUIT_NAME</code>.</p>
+<p>The <code>DONE_COMMAND</code> constant holds the <code>DONE</code> command. This command allows a user to mark a task as  <code>completed</code>  in the TODO list. The format is <code>DONE  FRUIT_NAME</code>.</p>
+<p>The <code>UNDO_COMMAND</code> constant holds the <code>UNDO</code> command. This command allows a user to move a completed task back into the <code>queue</code> in the TODO list. The format is <code>UNDO FRUIT_NAME</code>.</p>
+<p>The <code>EDIT_COMMAND</code> constant holds the <code>EDIT</code> command. This command allows a user to <code>modify</code> a task in the TODO list by changing it's <code>quantity</code>. The format is <code>EDIT  QUANTITY_IN_KG FRUIT_NAME</code>.</p>
+<p>The <code>EXIT_COMMAND</code> constant holds the <code>EXIT</code> command. This command allows a user to <code>exit</code>  the client gracefully and sync the local database cache with the remote PostgreSQL server. The format is <code>EXIT </code>.</p>
+<h4 id="word-formating"><a class="header" href="#word-formating">Word formating</a></h4>
+<p>A number of functions are presented in the code block above:</p>
+<p><code>clear_terminal()</code>  is used to clear the terminal using the command line specific flags <code>\x1B[2J\x1B[1;1H</code></p>
+<p><code>synching()</code> is used to show that the TODO list is being synced to the local SQLite database cache.</p>
+<p><code>synching_to_server()</code>  is used to show that the TODO list is being synced to the remote PostgreSQL database using the TCP API built in the previous chapter.</p>
+<p><code>loading()</code> is used to show that information about the user is being fetched from the remote PostgreSQL database.</p>
+<p><code>convert_case()</code> is used to format the <code>fruit</code> name to <code>Title Case</code>, for example, a user can enter a fruit named <code>Apple</code> as <code>apple</code>, <code>Apple</code>, <code>aPPLe</code>, <code>ApplE</code>, etc... This makes the user experience much smoother.</p>
+<p><code>split_words()</code> is used to split the text buffer from the user input into individual parts that correspond with the format specified in the <code>Commands</code> like  <code>COMMAND  QUANTITY_IN_KG FRUIT_NAME</code>.</p>
+<h4 id="in-memory-database"><a class="header" href="#in-memory-database">In-memory Database</a></h4>
+<p>Instead of doing database I/O by querying SQLite database every time we need to check the existence of data, we will use an in-memory database described by <code>MemDB</code> which contains  a <code>Mutex&lt;HashMap&lt;String, MyTodosModel&gt;&gt;</code> scoped to the internals of the crate. This is a <code>HashMap</code> indexed using a <code>String</code> which is the name of the todo in the <code>Model</code> and the value of the indexing key set to the <code>MyTodosModel</code>. The HashMap is protected by a <code>Mutex</code> for thread-safety.</p>
+<h4 id="formatting-the-todo-list"><a class="header" href="#formatting-the-todo-list">Formatting the TODO List</a></h4>
+<p>To format the list of TODOs in local cache and display them to the command-line interface, add the following to the </p>
+<p><code>File: src/utils.rs</code></p>
+<pre><code class="language-rust no_run noplayground">pub async fn format_todos(todo_models: &amp;MemDB) {
+    println!(&quot;\n\n\n&quot;);
+    if todo_models.lock().await.is_empty() {
+        println!(&quot;Oh My! There are no TODOs&quot;);
+    } else {
+        let mut done = Vec::&lt;MyTodosModel&gt;::default();
+        let mut not_done = Vec::&lt;MyTodosModel&gt;::default();
+
+        todo_models.lock().await.iter().for_each(|todo| {
+            if todo.1.status == 0 {
+                not_done.push(todo.1.to_owned());
+            } else {
+                done.push(todo.1.to_owned());
+            }
+        });
+
+        if not_done.is_empty() {
+            println!(&quot;Wohooo! All TODOs are Completed.&quot;)
+        } else {
+            println!(&quot;{QUANTITY:9}| {NOT_DONE:10}&quot;);
+            println!(&quot;----------------&quot;);
+            not_done.iter().for_each(|todo| {
+                println!(&quot;{:&gt;8} | {:10}&quot;, todo.quantity, todo.todo_name);
+            });
+            println!(&quot;----------------\n&quot;);
+        }
+
+        if done.is_empty() {
+            println!(&quot;----------------&quot;);
+            println!(&quot;Bummer :( You Have Not Completed Any TODOs!&quot;);
+            println!(&quot;----------------\n\n&quot;);
+        } else {
+            println!(&quot;{QUANTITY:9}| {DONE:10}&quot;);
+            println!(&quot;----------------&quot;);
+            done.iter().for_each(|todo| {
+                println!(&quot;{:&gt;8} | {:10}&quot;, todo.quantity, todo.todo_name);
+            });
+            println!(&quot;----------------\n&quot;);
+        }
+    }
+}
+
+</code></pre>
+<p><code>format_todos()</code> functions takes the in-memory database and loops through it, first checking if there are no TODOs  and prints <code>&quot;Oh My! There are no TODOs&quot;</code> . If TODOs are found, it iterates through them and sorts the <code>completed</code> todos into the <code>done</code> Vector declared by <code>let mut done = Vec::&lt;MyTodosModel&gt;::default();</code> or the <code>queued</code> into the <code>not_done</code> declared by <code>let mut not_done = Vec::&lt;MyTodosModel&gt;::default();</code> There are no completed TODOs but there are queued ones, it prints <code>&quot;Bummer :( You Have Not Completed Any TODOs!&quot;</code> and if there are no queued TODOs but completed ones, it prints <code>&quot;Wohooo! All TODOs are Completed.&quot;</code>. </p>
+<p>The <code>MyTodosModel</code> is the <code>Model</code> for the <code>Entity</code> table <code>todo_list</code> in the local SQLite database cache. </p>
+<p>Import the <code>utils</code> module in the <code>src/main.rs</code> file</p>
+<pre><code class="language-rust no_run noplayground">  mod common;
+  mod db_ops;
+  mod todo_list_table;
++ mod utils;
+
+  pub use common::*;
+  pub use db_ops::*;
+  pub use todo_list_table::prelude::*;
++ pub use utils::*;
+
+#[async_std::main]
+async fn main() -&gt; anyhow::Result&lt;()&gt; {
+    let db = database_config().await?;
+    create_todo_table(&amp;db).await?;
+
+    Ok(())
+}
+
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="remote-database-operations"><a class="header" href="#remote-database-operations">Remote Database Operations</a></h1>
+<p>To persist data remotely in the PostgreSQL database, modify the <code>src/db_ops.rs</code> file and add thew following code</p>
+<p><code>File: src/db_ops.rs</code></p>
+<pre><code class="language-rust no_run noplayground">// -- code snippet --
+use crate::{
+    synching_to_server, Command, MemDB, MyTodos, MyTodosActiveModel, MyTodosModel, TodoList,
+};
+
+pub async fn get_fruits() -&gt; anyhow::Result&lt;Vec&lt;String&gt;&gt; {
+    // Get the fruits first
+    let get_fruits = Command::ListFruits;
+    let serialized_command = bincode::serialize(&amp;get_fruits)?;
+    let mut fruits_list: Vec&lt;String&gt;;
+
+    let mut stream = TcpStream::connect(&quot;127.0.0.1:8080&quot;).await?;
+    stream.write_all(&amp;serialized_command).await?;
+
+    let mut fruits_buf = vec![0u8; 4096];
+    loop {
+        let n = stream.read(&amp;mut fruits_buf).await?;
+        let rx: Vec&lt;_&gt; = bincode::deserialize(&amp;fruits_buf).unwrap();
+
+        fruits_list = rx;
+
+        if n != 0 {
+            break;
+        }
+    }
+
+    Ok(fruits_list)
+}
+
+pub async fn store(db: &amp;DatabaseConnection, quantity: &amp;str, todo_name: &amp;str) -&gt; anyhow::Result&lt;()&gt; {
+    let my_todo = MyTodosActiveModel {
+        todo_name: Set(todo_name.to_owned()),
+        quantity: Set(quantity.to_owned()),
+        status: Set(0),
+        ..Default::default()
+    };
+
+    MyTodos::insert(my_todo).exec(db).await?;
+
+    Ok(())
+}
+
+pub async fn get(db: &amp;DatabaseConnection) -&gt; Result&lt;Vec&lt;MyTodosModel&gt;, sea_orm::DbErr&gt; {
+    MyTodos::find().all(db).await
+}
+
+pub async fn edit(
+    db: &amp;DatabaseConnection,
+    todo_model: &amp;MyTodosModel,
+    quantity: String,
+) -&gt; Result&lt;MyTodosModel, sea_orm::DbErr&gt; {
+    let mut todos_active_model: MyTodosActiveModel = todo_model.to_owned().into();
+    todos_active_model.quantity = Set(quantity);
+
+    Ok(todos_active_model.update(db).await?)
+}
+
+pub async fn done(
+    db: &amp;DatabaseConnection,
+    todo_model: &amp;MyTodosModel,
+) -&gt; Result&lt;MyTodosModel, sea_orm::DbErr&gt; {
+    let mut todos_active_model: MyTodosActiveModel = todo_model.to_owned().into();
+    todos_active_model.status = Set(1);
+
+    Ok(todos_active_model.update(db).await?)
+}
+
+pub async fn undo(
+    db: &amp;DatabaseConnection,
+    todo_model: &amp;MyTodosModel,
+) -&gt; Result&lt;MyTodosModel, sea_orm::DbErr&gt; {
+    let mut todos_active_model: MyTodosActiveModel = todo_model.to_owned().into();
+    todos_active_model.status = Set(0);
+
+    Ok(todos_active_model.update(db).await?)
+}
+
+pub(crate) async fn load_sqlite_cache(
+    db: &amp;DatabaseConnection,
+    memdb: &amp;mut MemDB,
+) -&gt; Result&lt;(), sea_orm::DbErr&gt; {
+    let sqlite_cache = get(&amp;db).await?;
+    memdb.lock().await.clear();
+    for mytodo_model in sqlite_cache {
+        memdb
+            .lock()
+            .await
+            .insert(mytodo_model.todo_name.clone(), mytodo_model);
+    }
+
+    Ok(())
+}
+
+pub async fn update_remote_storage(memdb: &amp;MemDB, username: &amp;str) -&gt; anyhow::Result&lt;()&gt; {
+    let mut temp_list = TodoList::default();
+    memdb.lock().await.values().for_each(|todo| {
+        if todo.status == 0 {
+            temp_list.queued.push(todo.to_owned());
+        } else {
+            temp_list.completed.push(todo.to_owned());
+        }
+    });
+
+    synching_to_server();
+
+    // Update a todo_list
+    let update_todo = Command::UpdateTodoList {
+        username: username.to_owned(),
+        todo_list: serde_json::to_string(&amp;temp_list)?,
+    };
+    let serialized_command = bincode::serialize(&amp;update_todo)?;
+
+    let mut stream = TcpStream::connect(&quot;127.0.0.1:8080&quot;).await?;
+    stream.write_all(&amp;serialized_command).await?;
+
+    let mut buffer = vec![0u8; 4096];
+    stream.read(&amp;mut buffer).await?;
+
+    bincode::deserialize::&lt;String&gt;(&amp;buffer)?;
+
+    Ok(())
+}
+
+pub async fn get_user_remote_storage(username: &amp;str) -&gt; anyhow::Result&lt;Option&lt;String&gt;&gt; {
+    let get_user = Command::Get(username.to_owned());
+    let serialized_command = bincode::serialize(&amp;get_user)?;
+
+    let mut stream = TcpStream::connect(&quot;127.0.0.1:8080&quot;).await?;
+    stream.write_all(&amp;serialized_command).await?;
+
+    let mut buffer = vec![0u8; 4096];
+    stream.read(&amp;mut buffer).await?;
+
+    Ok(bincode::deserialize::&lt;Option&lt;String&gt;&gt;(&amp;buffer)?)
+}
+
+pub async fn create_new_user(username: &amp;str) -&gt; anyhow::Result&lt;String&gt; {
+    let create_user = Command::CreateUser(username.to_owned());
+    let serialized_command = bincode::serialize(&amp;create_user)?;
+
+    let mut stream = TcpStream::connect(&quot;127.0.0.1:8080&quot;).await?;
+    stream.write_all(&amp;serialized_command).await?;
+
+    let mut buffer = vec![0u8; 4096];
+    stream.read(&amp;mut buffer).await?;
+
+    Ok(bincode::deserialize::&lt;String&gt;(&amp;buffer)?)
+}
+
+</code></pre>
+<p><code>get_fruits()</code> queries the list of fruits from the remote database.</p>
+<p><code>store()</code> will persist the contents of the in-memory database to local SQLite cache.</p>
+<p><code>load_sqlite_cache()</code> queries the local database a list of TODOs. This is useful when the client starts, since it fetches the cached TODOs and loads them into the in-memory database <code>MemDB</code>.</p>
+<p><code>edit()</code> persists the edits to the TODOs to the SQLite cache.</p>
+<p><code>done()</code> persists the state of the in-memory database with the <code>completed</code> TODOs in the SQLite cache.</p>
+<p><code>undo()</code> persists the state of the in-memory database with the <code>queued</code> TODOs in the SQLite cache reflecting the TODOs which have been moved from the <code>completed</code> Vector to the <code>queued</code> Vector.</p>
+<p><code>update_remote_storage()</code> updates the remote PostgreSQL database with the new changes in the TODO list.</p>
+<p><code>get_user_remote_storage()</code> checks if the username provided is in the remote PostgreSQL database.</p>
+<p><code>create_new_user()</code> creates a new user in the remote PostgreSQL database with the given <code>username</code>.</p>
+<p>Up next is reading from the terminal and performing database operations bases on the command.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="reading-user-input"><a class="header" href="#reading-user-input">Reading User Input</a></h1>
+<p>Rust standard library provides an easy way of reading from and writing to the command-line commonly known as <code>stdout</code>. First, create a file in the <code>src</code> folder called <code>user_input.rs</code>.</p>
+<p><code>File: src/user_input.rs</code></p>
+<pre><code class="language-rust no_run noplayground">use crate::{
+    format_todos, MemDB, ADD_COMMAND, DONE_COMMAND, EDIT_COMMAND, EXIT_COMMAND, NUMBER, TITLE,
+    UNDO_COMMAND,
+};
+use async_std::io;
+
+pub async fn read_line(
+    buffer: &amp;mut String,
+    fruits_list: &amp;Vec&lt;String&gt;,
+    memdb: &amp;MemDB,
+    //todo_list: &amp;Vec&lt;String&gt;,
+) -&gt; anyhow::Result&lt;String&gt; {
+    crate::clear_terminal();
+    buffer.clear();
+    println!(&quot;+--------------------------+&quot;);
+    println!(&quot;+ {:^5}{:17}+&quot;, &quot;COMMANDS&quot;, &quot; &quot;);
+    println!(&quot;+{:26}+&quot;, &quot; &quot;);
+    println!(&quot;→   {ADD_COMMAND:5}{:18}+&quot;, &quot; &quot;);
+    println!(&quot;→   {DONE_COMMAND:23}+&quot;);
+    println!(&quot;→   {UNDO_COMMAND:23}+&quot;);
+    println!(&quot;→   {EDIT_COMMAND:23}+&quot;);
+    println!(&quot;→   {EXIT_COMMAND:23}+&quot;);
+    println!(&quot;+{:26}+&quot;, &quot; &quot;);
+    println!(&quot;+--------------------------+&quot;);
+
+    println!(&quot;{NUMBER}| {TITLE:10}&quot;);
+    println!(&quot;----------------&quot;);
+    for (mut index, item) in fruits_list.iter().enumerate() {
+        index += 1;
+        println!(&quot;{index:2} | {item:10}&quot;);
+    }
+    println!(&quot;--------------------------------------------&quot;);
+    format_todos(&amp;memdb).await;
+
+    println!(&quot;Enter a fruit that is available.&quot;,);
+    let stdin = io::stdin(); // We get `Stdin` here.
+    stdin.read_line(buffer).await?;
+
+    Ok(buffer.to_owned())
+}
+
+</code></pre>
+<p><code>read_line()</code> is responsible for reading <code>stdout</code> for the user input and returning the user input as a String.  It always clears the terminal  using <code>utils::clear_terminal();</code> before the next input, clears the buffer to prevent stale commands using <code>buffer.clear()</code>, lists the list of fruits that the user can add and formats the TODOs printing the sorted TODO list and a set of commands that the user can input to interact with the client.</p>
+<h4 id="user-input-handler"><a class="header" href="#user-input-handler">User Input Handler</a></h4>
+<p>To handle the input create a file in the <code>src</code> directory called <code>handler.rs</code></p>
+<p><code>File: src/handler.rs</code></p>
+<pre><code class="language-rust no_run noplayground">use crate::{
+    convert_case, create_new_user, done, edit, get_fruits, get_user_remote_storage,
+    load_sqlite_cache, loading, read_line, split_words, store, synching, undo,
+    update_remote_storage, MemDB,
+};
+use async_std::io;
+use sea_orm::DatabaseConnection;
+use std::collections::HashMap;
+
+pub async fn input_handler(db: &amp;DatabaseConnection) -&gt; anyhow::Result&lt;()&gt; {
+    let mut username_buffer = String::default();
+    println!(&quot;What is Your Username...&quot;,);
+    let stdin = io::stdin(); // We get `Stdin` here.
+    stdin.read_line(&amp;mut username_buffer).await?;
+    let username = username_buffer.trim().to_string();
+
+    let fruits_list: Vec&lt;String&gt; = get_fruits().await?;
+
+    let mut buffer = String::new();
+    let mut text_buffer: String;
+    let mut memdb = MemDB::new(HashMap::default());
+    loading();
+    load_sqlite_cache(db, &amp;mut memdb).await?;
+
+    let remote_result = get_user_remote_storage(&amp;username).await?;
+    if let Some(result_data) = remote_result {
+        if result_data == &quot;USER_NOT_FOUND&quot; {
+            create_new_user(&amp;username).await?;
+        }
+    }
+
+    loop {
+        read_line(&amp;mut buffer, fruits_list.as_ref(), &amp;memdb).await?;
+        buffer = buffer.trim().to_owned();
+        let words = split_words(buffer.clone());
+        let command = words[0].to_lowercase().to_string();
+        let mut quantity: &amp;str = &quot;&quot;;
+        if command.as_str() == &quot;done&quot; || command.as_str() == &quot;undo&quot; {
+            text_buffer = convert_case(&amp;words[1]);
+        } else if command.as_str() == &quot;exit&quot; {
+            update_remote_storage(&amp;memdb, &amp;username).await?;
+            println!(&quot;SYNCED SUCCESSFULLY.&quot;);
+            println!(&quot;Bye! :)&quot;);
+            break;
+        } else {
+            quantity = &amp;words[1];
+            text_buffer = convert_case(&amp;words[2]);
+        }
+
+        if !text_buffer.is_empty() {
+            match fruits_list.iter().find(|&amp;fruit| *fruit == text_buffer) {
+                None =&gt; {
+                    if !text_buffer.is_empty() {
+                        println!(&quot;The fruit `{buffer}` is not available.\n&quot;,);
+                    }
+                    continue;
+                }
+                Some(_) =&gt; {
+                    if command.as_str() == &quot;add&quot; {
+                        if memdb.lock().await.contains_key(&amp;text_buffer) {
+                            continue;
+                            //TODO
+                        } else {
+                            synching();
+                            store(&amp;db, quantity, &amp;text_buffer).await?;
+                            load_sqlite_cache(&amp;db, &amp;mut memdb).await?;
+                        }
+                    } else if command.as_str() == &quot;edit&quot; {
+                        if let Some(mut todo_model) = memdb.lock().await.get_mut(&amp;text_buffer) {
+                            if todo_model.status != 1 {
+                                synching();
+                                edit(&amp;db, todo_model, quantity.to_owned()).await?;
+                                todo_model.quantity = quantity.to_owned();
+                            }
+                        } else {
+                            continue;
+                        }
+                    } else if command.as_str() == &quot;done&quot; {
+                        if let Some(todo_model) = memdb.lock().await.get_mut(&amp;text_buffer) {
+                            if todo_model.status == 0 {
+                                synching();
+                                let updated_model = done(&amp;db, todo_model).await?;
+                                *todo_model = updated_model;
+                            }
+                            continue;
+                        } else {
+                            continue;
+                        }
+                    } else if command.as_str() == &quot;undo&quot; {
+                        if let Some(todo_model) = memdb.lock().await.get_mut(&amp;text_buffer) {
+                            if todo_model.status == 1 {
+                                synching();
+                                let updated_model = undo(&amp;db, todo_model).await?;
+                                *todo_model = updated_model;
+                            }
+                            continue;
+                        } else {
+                            continue;
+                        }
+                    } else {
+                        dbg!(&quot;Unsupported Command&quot;);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    Ok(())
+}
+
+</code></pre>
+<p>The code block above is nested and there are comments to help understanding it. Simply, it:</p>
+<pre><code>1. reads the `username`
+1. looks up the `username` from the remote PostgreSQL database
+1. Loads the local TODO list cache from the local SQLite database
+1. Stores the loaded local TODO list cache into `MemDB` in-memory database
+1. reads `stdin` for user input into a `buffer`
+1. splits the buffer into individual constituents and stores them in an array
+1. reads the first index of the array to get the command
+1. performs conditional operations on the command and performs the necessary database operations
+1. If the command it not available it exits the program
+1. If the fruit provided is not available, it clears the buffer and reads `stdin` again
+1. if the command is `EXIT` , it syncs the local SQLite cache with the remote PostgreSQL database and exits.
+</code></pre>
+<p>Lastly, import the modules into <code>src/main.rs</code></p>
+<p><code>File: src/main.rs</code></p>
+<pre><code class="language-rust no_run noplayground">  mod common;
+  mod db_ops;
++ mod handler;
+  mod todo_list_table;
++ mod user_input;
+  mod utils;
+
+  pub use common::*;
+  pub use db_ops::*;
++ pub use handler::*;
+  pub use todo_list_table::prelude::*;
++ pub use user_input::*;
+  pub use utils::*;
+
+#[async_std::main]
+async fn main() -&gt; anyhow::Result&lt;()&gt; {
+    let db = database_config().await?;
+    create_todo_table(&amp;db).await?;
+
++	input_handler(&amp;db).await?;
+
+    Ok(())
+}
+
+</code></pre>
+<h4 id="running-the-client-and-server"><a class="header" href="#running-the-client-and-server">Running the Client and Server</a></h4>
+<p>Running both the <code>todo-server</code> in the <code>TODO-Server</code> directory  prints</p>
+<pre><code class="language-sh">$ ../target/debug/todo-server
+`CREATE TABLE fruits` &quot;Operation Successful&quot;
+`CREATE TABLE todos` &quot;Operation Successful&quot;
+Listening on 127.0.0.1:8080
+
+</code></pre>
+<p>Running the <code>todo-client</code> in the current directory prints.</p>
+<pre><code class="language-sh">$ Running `target/debug/todo_client`
+`CREATE TABLE todo_list` &quot;Operation Successful&quot;
+What is Your Username...
+</code></pre>
+<p><strong>Enter a username like <code>user001</code></strong></p>
+<p>This creates a new user in the PostgreSQL database since the user currently does not exist. Querying the PostgreSQL database prints</p>
+<pre><code class="language-sh">fruits_market=# SELECT * FROM todos;
+ todo_id | username | todo_list 
+---------+----------+-----------
+       2 | user001  | 
+(1 row)
+</code></pre>
+<p>The client then prints a list of fruits, commands and a TODO section:</p>
+<pre><code class="language-sh">+--------------------------+
++ COMMANDS                 +
++                          +
+→   ADD                    +
+→   DONE                   +
+→   UNDO                   +
+→   EDIT                   +
+→   EXIT                   +
++                          +
++--------------------------+
+No.| FRUITS AVAILABLE
+----------------
+ 1 | Apple     
+ 2 | Orange    
+ 3 | Mango     
+ 4 | Pineapple 
+--------------------------------------------
+
+
+
+
+Oh My! There are no TODOs
+Enter a fruit that is available.
+
+</code></pre>
+<p><strong>Adding a fruit, like <code>ADD 5kg Apple</code> prints:</strong></p>
+<pre><code class="language-sh">+--------------------------+
++ COMMANDS                 +
++                          +
+→   ADD                    +
+→   DONE                   +
+→   UNDO                   +
+→   EDIT                   +
+→   EXIT                   +
++                          +
++--------------------------+
+No.| FRUITS AVAILABLE
+----------------
+ 1 | Apple     
+ 2 | Orange    
+ 3 | Mango     
+ 4 | Pineapple 
+--------------------------------------------
+
+
+
+
+QUANTITY | NOT DONE  
+----------------
+     5kg | Apple     
+----------------
+
+----------------
+Bummer :( You Have Not Completed Any TODOs!
+----------------
+
+
+Enter a fruit that is available.
+
+</code></pre>
+<p>A <code>NOT DONE</code> table is added and below that the statement <code>Bummer :( You Have Not Completed Any TODOs!</code> is printed showing that we have <code>TODOs</code> that are not done yet.</p>
+<p><strong>Add another fruit like <code>ADD 1kg OraNGe</code> will print:</strong></p>
+<pre><code class="language-sh">+--------------------------+
++ COMMANDS                 +
++                          +
+→   ADD                    +
+→   DONE                   +
+→   UNDO                   +
+→   EDIT                   +
+→   EXIT                   +
++                          +
++--------------------------+
+No.| FRUITS AVAILABLE
+----------------
+ 1 | Apple     
+ 2 | Orange    
+ 3 | Mango     
+ 4 | Pineapple 
+--------------------------------------------
+
+
+
+
+QUANTITY | NOT DONE  
+----------------
+     5kg | Apple     
+     1kg | Orange    
+----------------
+
+----------------
+Bummer :( You Have Not Completed Any TODOs!
+----------------
+
+
+Enter a fruit that is available.
+
+</code></pre>
+<p>Here, even though the fruit <code>Orange</code> is typed as <code>OraNGe</code>, it is still added since we handle this in the code using <code>convert_case()</code> function.</p>
+<p><strong>Now, edit the orange from <code>1Kg </code> to <code>3kg</code> with <code>EDIT 3kg Orange</code></strong>. This prints:</p>
+<pre><code class="language-sh">+--------------------------+
++ COMMANDS                 +
++                          +
+→   ADD                    +
+→   DONE                   +
+→   UNDO                   +
+→   EDIT                   +
+→   EXIT                   +
++                          +
++--------------------------+
+No.| FRUITS AVAILABLE
+----------------
+ 1 | Apple     
+ 2 | Orange    
+ 3 | Mango     
+ 4 | Pineapple 
+--------------------------------------------
+
+
+
+
+QUANTITY | NOT DONE  
+----------------
+     5kg | Apple     
+     3kg | Orange    
+----------------
+
+----------------
+Bummer :( You Have Not Completed Any TODOs!
+----------------
+
+
+Enter a fruit that is available.
+
+</code></pre>
+<p><strong>Next, mark the <code>Apple</code> TODO as <code>done</code> using <code>DONE apple</code></strong>. This prints:</p>
+<pre><code class="language-sh">+--------------------------+
++ COMMANDS                 +
++                          +
+→   ADD                    +
+→   DONE                   +
+→   UNDO                   +
+→   EDIT                   +
+→   EXIT                   +
++                          +
++--------------------------+
+No.| FRUITS AVAILABLE
+----------------
+ 1 | Apple     
+ 2 | Orange    
+ 3 | Mango     
+ 4 | Pineapple 
+--------------------------------------------
+
+
+
+
+QUANTITY | NOT DONE  
+----------------
+     3kg | Orange    
+----------------
+
+QUANTITY | DONE TODOS
+----------------
+     5kg | Apple     
+----------------
+
+Enter a fruit that is available.
+
+</code></pre>
+<p>A <code>DONE TODOS</code> table is created with the <code>Apple</code> as a member.</p>
+<p><strong>Next, mark the <code>Apple</code> as undone with <code>UNDO Apple</code>.</strong> This prints:</p>
+<pre><code class="language-sh">+--------------------------+
++ COMMANDS                 +
++                          +
+→   ADD                    +
+→   DONE                   +
+→   UNDO                   +
+→   EDIT                   +
+→   EXIT                   +
++                          +
++--------------------------+
+No.| FRUITS AVAILABLE
+----------------
+ 1 | Apple     
+ 2 | Orange    
+ 3 | Mango     
+ 4 | Pineapple 
+--------------------------------------------
+
+
+
+
+QUANTITY | NOT DONE  
+----------------
+     5kg | Apple     
+     3kg | Orange    
+----------------
+
+----------------
+Bummer :( You Have Not Completed Any TODOs!
+----------------
+
+
+Enter a fruit that is available.
+
+
+</code></pre>
+<p>The <code>Apple</code> is moved back to the <code>NOT DONE</code> table and since there are no DONE TODOs, the <code>DONE TODO</code> table is replaced by <code>Bummer :( You Have Not Completed Any TODOs!</code> .</p>
+<p>Next, complete all TODOs by marking both the <code>Orange</code> and <code>Apple</code> as done with:</p>
+<pre><code>1. `DONE Apple`
+1. `DONE orange`
+</code></pre>
+<p>This prints:</p>
+<pre><code class="language-sh">+--------------------------+
++ COMMANDS                 +
++                          +
+→   ADD                    +
+→   DONE                   +
+→   UNDO                   +
+→   EDIT                   +
+→   EXIT                   +
++                          +
++--------------------------+
+No.| FRUITS AVAILABLE
+----------------
+ 1 | Apple     
+ 2 | Orange    
+ 3 | Mango     
+ 4 | Pineapple 
+--------------------------------------------
+
+
+
+
+Wohooo! All TODOs are Completed.
+QUANTITY | DONE TODOS
+----------------
+     5kg | Apple     
+     3kg | Orange    
+----------------
+
+Enter a fruit that is available.
+
+
+
+</code></pre>
+<p>All TODOs are moved to the <code>DONE TODOS</code> table and the <code>NOT DONE</code> table is replaced by <code>Wohooo! All TODOs are Completed.</code> since all <code>TODOs</code> are done. This proves that our logic works. </p>
+<p>Lastly, exit the <code>todo-client</code> gracefully with the command <code>EXIT</code>. This syncs the in-memory database to the remote PostgreSQL server and then exits the program. It prints:</p>
+<pre><code class="language-sh">SYNCING TO SERVER...
+SYNCED SUCCESSFULLY.
+Bye! :)
+</code></pre>
+<p>The state of the SQLite cache is:</p>
+<pre><code class="language-sql">sqlite&gt; SELECT * FROM todo_list ;
+1|Apple|5kg|1
+2|Orange|3kg|1
+sqlite&gt; 
+
+</code></pre>
+<p>The state of the PostgreSQL server is:</p>
+<pre><code class="language-sql">fruits_market=# SELECT * FROM todos;
+ todo_id | username |                                                                        todo_list                                                                         
+---------+----------+----------------------------------------------------------------------------------------------------------------------------------------------------------
+       2 | user001  | {&quot;queued&quot;:[],&quot;completed&quot;:[{&quot;todo_id&quot;:2,&quot;todo_name&quot;:&quot;Orange&quot;,&quot;quantity&quot;:&quot;3kg&quot;,&quot;status&quot;:1},{&quot;todo_id&quot;:1,&quot;todo_name&quot;:&quot;Apple&quot;,&quot;quantity&quot;:&quot;5kg&quot;,&quot;status&quot;:1}]}
+(1 row)
+
+</code></pre>
+<p>This shows that the TODO list has been successfully synced to remote storage. Running the client again with the same username <code>user001</code> should print the <code>DONE TODOS</code> from the persisted SQLite cache:</p>
+<pre><code class="language-sh">+--------------------------+
++ COMMANDS                 +
++                          +
+→   ADD                    +
+→   DONE                   +
+→   UNDO                   +
+→   EDIT                   +
+→   EXIT                   +
++                          +
++--------------------------+
+No.| FRUITS AVAILABLE
+----------------
+ 1 | Apple     
+ 2 | Orange    
+ 3 | Mango     
+ 4 | Pineapple 
+--------------------------------------------
+
+
+
+
+Wohooo! All TODOs are Completed.
+QUANTITY | DONE TODOS
+----------------
+     5kg | Apple     
+     3kg | Orange    
+----------------
+
+Enter a fruit that is available.
+
+
+</code></pre>
+<p>That's it for this tutorial. :)</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            MathJax.Hub.Register.StartupHook('End', function() {
+                window.setTimeout(window.print, 100);
+            });
+        });
+        </script>
+
+    </body>
+</html>

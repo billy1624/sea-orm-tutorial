@@ -1,0 +1,11 @@
+https://www.sea-ql.org/sea-orm-tutorial/create_operation
+https://www.sea-ql.org/sea-orm-tutorial/delete_operation
+https://www.sea-ql.org/sea-orm-tutorial/foreign_key_insert
+https://www.sea-ql.org/sea-orm-tutorial
+https://www.sea-ql.org/sea-orm-tutorial/insert_operations
+https://www.sea-ql.org/sea-orm-tutorial/introduction
+https://www.sea-ql.org/sea-orm-tutorial/read_operation
+https://www.sea-ql.org/sea-orm-tutorial/related_tables
+https://www.sea-ql.org/sea-orm-tutorial/relationships
+https://www.sea-ql.org/sea-orm-tutorial/simple_crud_operations
+https://www.sea-ql.org/sea-orm-tutorial/update_operation
