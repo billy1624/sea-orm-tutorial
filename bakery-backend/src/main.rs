@@ -1,12 +1,11 @@
 mod entities;
 mod migrator;
 
+use entities::{prelude::*, *};
 use futures::executor::block_on;
 use migrator::Migrator;
-use sea_orm::{ConnectionTrait, Database, DbBackend, DbErr, Statement};
+use sea_orm::*;
 use sea_orm_migration::prelude::*;
-
-use entities::prelude::*; // Bring the entities `Baker` and `Bakery` into scope
 
 const DATABASE_URL: &str = "mysql://root:root@localhost:3306";
 
@@ -47,6 +46,65 @@ async fn run() -> Result<(), DbErr> {
     Migrator::refresh(db).await?;
     assert!(schema_manager.has_table("bakery").await?);
     assert!(schema_manager.has_table("baker").await?);
+
+    // Insert and Update
+    {
+        let happy_bakery = bakery::ActiveModel {
+            name: ActiveValue::Set("Happy Bakery".to_owned()),
+            profit_margin: ActiveValue::Set(0.0),
+            ..Default::default()
+        };
+        let res = Bakery::insert(happy_bakery).exec(db).await?;
+
+        let sad_bakery = bakery::ActiveModel {
+            id: ActiveValue::Set(res.last_insert_id),
+            name: ActiveValue::Set("Sad Bakery".to_owned()),
+            profit_margin: ActiveValue::NotSet,
+        };
+        sad_bakery.update(db).await?;
+
+        let john = baker::ActiveModel {
+            name: ActiveValue::Set("John".to_owned()),
+            bakery_id: ActiveValue::Set(res.last_insert_id),
+            ..Default::default()
+        };
+        Baker::insert(john).exec(db).await?;
+    }
+
+    // Read
+    {
+        let bakeries: Vec<bakery::Model> = Bakery::find().all(db).await?;
+        assert_eq!(bakeries.len(), 1);
+
+        // Finding by id is built-in
+        let sad_bakery: Option<bakery::Model> = Bakery::find_by_id(1).one(db).await?;
+        assert_eq!(sad_bakery.unwrap().name, "Sad Bakery");
+
+        // Finding by arbitrary column with `filter()`
+        let sad_bakery: Option<bakery::Model> = Bakery::find()
+            .filter(bakery::Column::Name.eq("Sad Bakery"))
+            .one(db)
+            .await?;
+        assert_eq!(sad_bakery.unwrap().id, 1);
+    }
+
+    // Delete
+    {
+        let john = baker::ActiveModel {
+            id: ActiveValue::Set(1), // The primary must be set
+            ..Default::default()
+        };
+        john.delete(db).await?;
+
+        let sad_bakery = bakery::ActiveModel {
+            id: ActiveValue::Set(1), // The primary must be set
+            ..Default::default()
+        };
+        sad_bakery.delete(db).await?;
+
+        let bakeries: Vec<bakery::Model> = Bakery::find().all(db).await?;
+        assert!(bakeries.is_empty());
+    }
 
     Ok(())
 }
